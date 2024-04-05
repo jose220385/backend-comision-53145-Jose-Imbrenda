@@ -17,17 +17,14 @@ app.get('/products', async (req,res)=>{
     res.send({status: 'success', payload: products})
 })
 
+
 app.get('/products/:pid', async (req,res)=>{
-    try{
     const {pid} = req.params
     console.log(pid)
     console.log(typeof(pid))
-    productFound = await getProductById(pid)
-    console.log(productFound)
+    const productFound = await productManager.getProductById(pid)
+    if(!productFound){res.status(404).send({status:'error', error: 'Producto no encontrado'})}
     res.send({status: 'success', payload: productFound})
-    } catch (error){
-        res.status(404).send({status:'error', error: 'Producto no encontrado'})
-    }
 })
 
 

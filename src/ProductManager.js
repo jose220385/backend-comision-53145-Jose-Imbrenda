@@ -73,9 +73,6 @@ export default class ProductManager {
     try{
     const products = await this.readFile()
     const productFound = products.find((product) => product.id === id);
-    if(!productFound){
-      throw new Error `El ${id} no corresponde a ningun producto en existencia`
-    };
     return productFound;
   } catch (error) {
     console.log(error);
