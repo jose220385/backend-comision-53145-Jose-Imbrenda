@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { v4 as uuidv4 } from 'uuid';
 
 export default class ProductManager {
   constructor() {
@@ -19,7 +20,7 @@ export default class ProductManager {
     try{
       await fs.promises.writeFile(
         this.path,
-        JSON.stringify(file, 'null', ),
+        JSON.stringify(file, 'null',2),
         "utf-8")
   } catch (err){
     console.log(err)
@@ -46,7 +47,7 @@ export default class ProductManager {
       this.codeValidation(objeto,products)
 
       const newProduct = {
-        id: products.length +1,
+        id: uuidv4(),
         code: objeto.code,
         title: objeto.title,
         description: objeto.description,
@@ -70,7 +71,7 @@ export default class ProductManager {
 
   getProductById = async(id) =>{
     try{
-    const products = this.readFile()
+    const products = await this.readFile()
     const productFound = products.find((product) => product.id === id);
     if(!productFound){
       throw new Error `El ${id} no corresponde a ningun producto en existencia`
@@ -109,7 +110,7 @@ updateProduct = async(id,productToUpdate) =>{
 
   this.codeValidation(productToUpdate,products)
 
-  products[indexToUpdate] = {id:products[indexToUpdate].id, ...productToUpdate}
+  products[indexToUpdate] = {...products[indexToUpdate], ...productToUpdate, id}
 
   await this.writeFile(products)
 }
@@ -117,49 +118,40 @@ updateProduct = async(id,productToUpdate) =>{
 }
 
 
-// Pruebas:
+// Agrego los 10 productos:
 
-/* const productManager = new ProductManager();
+const productManager = new ProductManager();
 
-const objeto = {
-  title: "producto prueba",
-  description: "Este es un producto prueba",
-  price: 200,
-  thumbnail: "”Sin imagen”",
-  code: "abc123",
-  stock: 25,
+
+const test = async() =>{
+    const productoEncontrado = await productManager.getProductById('80feed59-d173-4805-8620-4b38f5f3ab5c')
+    console.log(productoEncontrado)
 }
 
-const objeto2 = {
-  title: "producto prueba 2",
-  description: "Este es un producto prueba",
-  price: 300,
-  thumbnail: "”Sin imagen”",
-  code: "abc124",
-  stock: 25,
-}
+//test()
 
-const objeto3 = {
-  title: "producto prueba 3",
-  description: "Este es un producto prueba",
-  price: 300,
-  thumbnail: "”Sin imagen”",
-  code: "abc125",
-  stock: 25,
-} */
-
-/* const test = async() =>{
+/*
+const productsUpLoad = async() =>{
   try{
-    await productManager.addProduct(objeto)
-    await productManager.addProduct(objeto2)
-    await productManager.addProduct(objeto3)
+    let code = 111
+    for (let i = 0; i<10; i++){
+        await productManager.addProduct({
+            title: "producto prueba " + (i+1),
+            description: "Este es un producto prueba",
+            price: 300,
+            thumbnail: "Sin imagen",
+            code: code,
+            stock: 25,
+        })
+        code ++
+    }
   } catch (err){
     console.log(err)
   }
 }
 
-test() */
+productsUpLoad() */
 
-//productManager.deleteProduct(3)
+//productManager.deleteProduct("66a2fa0f-a759-43ab-9d68-2e5cfc0e2e92")
 
-//productManager.updateProduct(2,objeto3)
+//productManager.updateProduct("0e2eb4a9-e2bb-428e-96ea-6e9c59ff995d",objeto3)

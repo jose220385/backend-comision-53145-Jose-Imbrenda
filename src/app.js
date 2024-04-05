@@ -8,7 +8,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.get('/products', async (req,res)=>{
-    let limit = parseInt(req.query.limit)
+    let {limit} = req.query
     const products = await productManager.getProducts()
     if(limit){
         const limitedProducts = products.slice(0,limit)
@@ -18,10 +18,16 @@ app.get('/products', async (req,res)=>{
 })
 
 app.get('/products/:pid', async (req,res)=>{
+    try{
     const {pid} = req.params
-    productFound = await getProductById(parseInt(pid))
-    if(!productFound)res.status(404).send({status:'error', error:'Producto no encontrado'})
+    console.log(pid)
+    console.log(typeof(pid))
+    productFound = await getProductById(pid)
+    console.log(productFound)
     res.send({status: 'success', payload: productFound})
+    } catch (error){
+        res.status(404).send({status:'error', error: 'Producto no encontrado'})
+    }
 })
 
 
