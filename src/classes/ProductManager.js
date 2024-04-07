@@ -2,8 +2,8 @@ import fs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
 
 export default class ProductManager {
-  constructor() {
-    (this.path = "./products.json")
+  constructor(path) {
+    (this.path = path)
 
   }
 
@@ -27,33 +27,30 @@ export default class ProductManager {
   }
   }
 
-  codeValidation=(objeto, products)=>{
+  codeValidation=(object, products)=>{
     const codeValidation = products.some(
-      (product) => objeto.code === product.code
+      (product) => object.code === product.code
     );
     if (codeValidation) {
       throw new Error("El codigo corresponde a otro producto");
     }
   }
 
-  addProduct = async (objeto) => {
+  addProduct = async (object) => {
     try {
-      if (!objeto.code || !objeto.title || !objeto.description || !objeto.price || !objeto.thumbnail || !objeto.stock) {
-        throw new Error("Todos los campos son obligatorios");
-    }
 
       const products = await this.readFile()
 
-      this.codeValidation(objeto,products)
+      this.codeValidation(object,products)
 
       const newProduct = {
         id: uuidv4(),
-        code: objeto.code,
-        title: objeto.title,
-        description: objeto.description,
-        price: parseFloat(objeto.price),
-        thumbnail: objeto.thumbnail,
-        stock: parseInt(objeto.stock),
+        code: object.code,
+        title: object.title,
+        description: object.description,
+        price: parseFloat(object.price),
+        thumbnail: object.thumbnail,
+        stock: parseInt(object.stock),
       };
       await products.push(newProduct);
 
@@ -102,7 +99,8 @@ updateProduct = async(id,productToUpdate) =>{
   const indexToUpdate = products.findIndex(p => p.id === id)
   
   if(indexToUpdate<0){
-    throw new Error `El ${id} no corresponde a ningun producto en existencia`
+    //throw new Error `El ${id} no corresponde a ningun producto en existencia`
+    return res.status(404).send({status: 'error', error:`El ${id} no corresponde a ningun producto en existencia`})
   }
 
   this.codeValidation(productToUpdate,products)
@@ -115,7 +113,8 @@ updateProduct = async(id,productToUpdate) =>{
 }
 
 
-// Agrego los 10 productos:
+
+/* Test de funcion
 
 const productManager = new ProductManager();
 
@@ -125,9 +124,12 @@ const test = async() =>{
     console.log(productoEncontrado)
 }
 
-//test()
+test() */
 
 /*
+
+Agrego los 10 productos:
+
 const productsUpLoad = async() =>{
   try{
     let code = 111
@@ -151,4 +153,4 @@ productsUpLoad() */
 
 //productManager.deleteProduct("66a2fa0f-a759-43ab-9d68-2e5cfc0e2e92")
 
-//productManager.updateProduct("0e2eb4a9-e2bb-428e-96ea-6e9c59ff995d",objeto3)
+//productManager.updateProduct("0e2eb4a9-e2bb-428e-96ea-6e9c59ff995d",object3)

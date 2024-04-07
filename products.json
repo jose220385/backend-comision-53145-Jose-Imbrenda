@@ -88,5 +88,14 @@
     "price": 300,
     "thumbnail": "Sin imagen",
     "stock": 25
+  },
+  {
+    "id": "a9781751-09bf-4eda-b0f9-d43780e129ad",
+    "code": 321456,
+    "title": "objeto x put",
+    "description": "descripcion de objeto x put",
+    "price": 600,
+    "thumbnail": "ubicacion",
+    "stock": 300
   }
 ]
