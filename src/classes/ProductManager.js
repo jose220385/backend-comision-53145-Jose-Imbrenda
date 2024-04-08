@@ -1,9 +1,10 @@
 import fs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
+import { __dirname } from '../utils.js';
 
 export default class ProductManager {
-  constructor(path) {
-    (this.path = path)
+  constructor() {
+    (this.path = `${__dirname}/products.json`)
 
   }
 
@@ -114,21 +115,24 @@ updateProduct = async(id,productToUpdate) =>{
 
 
 
-/* Test de funcion
+//Test de funcion
+
+//node --watch ./src/classes/ProductManager.js
 
 const productManager = new ProductManager();
 
 
-const test = async() =>{
-    const productoEncontrado = await productManager.getProductById('80feed59-d173-4805-8620-4b38f5f3ab5c')
-    console.log(productoEncontrado)
+ /* const test = async() =>{
+    console.log(await productManager.getProducts())
+    const productoEncontrado = await productManager.getProductById("62bdec17-c4e8-4ee1-9209-df230a33d93e")
+    console.log(productoEncontrado) 
 }
 
-test() */
+test()  */
 
-/*
 
-Agrego los 10 productos:
+
+//Agrego los 10 productos:
 
 const productsUpLoad = async() =>{
   try{
@@ -147,9 +151,10 @@ const productsUpLoad = async() =>{
   } catch (err){
     console.log(err)
   }
-}
+} 
 
-productsUpLoad() */
+productsUpLoad()
+
 
 //productManager.deleteProduct("66a2fa0f-a759-43ab-9d68-2e5cfc0e2e92")
 
