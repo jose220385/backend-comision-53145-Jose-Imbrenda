@@ -47,11 +47,13 @@ export default class ProductManager {
       const newProduct = {
         id: uuidv4(),
         code: object.code,
+        category: object.category,
         title: object.title,
         description: object.description,
         price: parseFloat(object.price),
         thumbnail: object.thumbnail,
         stock: parseInt(object.stock),
+        status: true
       };
       await products.push(newProduct);
 
@@ -119,7 +121,7 @@ updateProduct = async(id,productToUpdate) =>{
 
 //node --watch ./src/classes/ProductManager.js
 
-const productManager = new ProductManager();
+//const productManager = new ProductManager();
 
 
  /* const test = async() =>{
@@ -134,12 +136,13 @@ test()  */
 
 //Agrego los 10 productos:
 
-const productsUpLoad = async() =>{
+/* const productsUpLoad = async() =>{
   try{
     let code = 111
     for (let i = 0; i<10; i++){
         await productManager.addProduct({
             title: "producto prueba " + (i+1),
+            category: "categoria 1",
             description: "Este es un producto prueba",
             price: 300,
             thumbnail: "Sin imagen",
@@ -153,7 +156,7 @@ const productsUpLoad = async() =>{
   }
 } 
 
-productsUpLoad()
+productsUpLoad() */
 
 
 //productManager.deleteProduct("66a2fa0f-a759-43ab-9d68-2e5cfc0e2e92")
