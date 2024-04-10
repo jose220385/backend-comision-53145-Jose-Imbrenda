@@ -1,8 +1,9 @@
 import { Router } from "express";
 import ProductManager from '../classes/ProductManager.js'
+import { isExist } from "../utils.js";
+import { __dirname } from "../utils.js";
 
-const router = new Router() //se puede poner solo Router()
-//const path = '../../products.json'
+const router = new Router() 
 const productManager = new ProductManager();
 
 router.get('/', async (req,res)=>{
@@ -30,8 +31,22 @@ router.post('/', async (req,res)=>{
 })
 router.put('/:pid', async (req,res)=>{
     const {pid} = req.params
+    const existProduct = await isExist(pid,`${__dirname}/products.json`)
+    if(!existProduct){
+        return res.status(404).send({status: 'error', error:`No se ha encontrado el producto que desea modificar`})
+    }
     await productManager.updateProduct(pid,req.body)
     res.send({status: 'success', payload: req.body})
+})
+
+router.delete('/:pid', async(req,res)=>{
+    const {pid} = req.params
+    const existProduct = await isExist(pid,`${__dirname}/products.json`)
+    if(!existProduct){
+        return res.status(404).send({status: 'error', error:`No se ha encontrado el producto que desea borrar`})
+    }
+    await productManager.deleteProduct(pid)
+    res.send({status: 'success', payload: 'Producto Borrado con éxito'})
 })
 
 

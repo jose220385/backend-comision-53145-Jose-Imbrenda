@@ -1,31 +1,12 @@
 import fs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
 import { __dirname } from '../utils.js';
+import { readFile, writeFile } from "../utils.js";
 
 export default class ProductManager {
   constructor() {
     (this.path = `${__dirname}/products.json`)
 
-  }
-
-  readFile = async()=>{
-    try{
-    const file = await fs.promises.readFile(this.path, 'utf-8')
-    return JSON.parse(file)
-  } catch {
-    return []
-  }
-  }
-
-  writeFile = async(file)=>{
-    try{
-      await fs.promises.writeFile(
-        this.path,
-        JSON.stringify(file, 'null',2),
-        "utf-8")
-  } catch (err){
-    console.log(err)
-  }
   }
 
   codeValidation=(object, products)=>{
@@ -40,7 +21,7 @@ export default class ProductManager {
   addProduct = async (object) => {
     try {
 
-      const products = await this.readFile()
+      const products = await readFile(this.path)
 
       this.codeValidation(object,products)
 
@@ -57,7 +38,7 @@ export default class ProductManager {
       };
       await products.push(newProduct);
 
-      await this.writeFile(products)
+      await writeFile(products,this.path)
 
     } catch (error) {
       console.log(error);
@@ -65,13 +46,13 @@ export default class ProductManager {
   };
 
   getProducts = async() => {
-    const products = await this.readFile()
+    const products = await readFile(this.path)
     return products;
   }
 
   getProductById = async(id) =>{
     try{
-    const products = await this.readFile()
+    const products = await readFile(this.path)
     const productFound = products.find((product) => product.id === id);
     return productFound;
   } catch (error) {
@@ -81,16 +62,12 @@ export default class ProductManager {
 
 deleteProduct = async(id) =>{
 try{
-  const products = await this.readFile()
+  const products = await readFile(this.path)
   const indexToDelete = products.findIndex(p => p.id === id)
   
-  if(indexToDelete<0){
-    throw new Error `El ${id} no corresponde a ningun producto en existencia`
-  }
-
   products.splice(indexToDelete,1)
 
-  await this.writeFile(products)
+  await writeFile(products,this.path)
 
 } catch (error) {
   console.log(error);
@@ -98,19 +75,11 @@ try{
 }
 
 updateProduct = async(id,productToUpdate) =>{
-  const products = await this.readFile()
+  const products = await readFile(this.path)
   const indexToUpdate = products.findIndex(p => p.id === id)
-  
-  if(indexToUpdate<0){
-    //throw new Error `El ${id} no corresponde a ningun producto en existencia`
-    return res.status(404).send({status: 'error', error:`El ${id} no corresponde a ningun producto en existencia`})
-  }
-
   this.codeValidation(productToUpdate,products)
-
   products[indexToUpdate] = {...products[indexToUpdate], ...productToUpdate, id}
-
-  await this.writeFile(products)
+  await writeFile(products,this.path)
 }
 
 }
@@ -121,12 +90,13 @@ updateProduct = async(id,productToUpdate) =>{
 
 //node --watch ./src/classes/ProductManager.js
 
-//const productManager = new ProductManager();
+/* const productManager = new ProductManager();
 
 
- /* const test = async() =>{
+ const test = async() =>{
     console.log(await productManager.getProducts())
-    const productoEncontrado = await productManager.getProductById("62bdec17-c4e8-4ee1-9209-df230a33d93e")
+    console.log('------------------------')
+    const productoEncontrado = await productManager.getProductById("61fc0d81-320e-4e10-af5e-e4add37555d7")
     console.log(productoEncontrado) 
 }
 

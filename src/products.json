@@ -83,9 +83,9 @@
   {
     "id": "61fc0d81-320e-4e10-af5e-e4add37555d7",
     "code": 120,
-    "title": "producto prueba 10",
-    "description": "Este es un producto prueba",
-    "price": 300,
+    "title": "producto modificado con PUT",
+    "description": "Este es un producto modificado",
+    "price": 600,
     "thumbnail": "Sin imagen",
     "stock": 25
   }
