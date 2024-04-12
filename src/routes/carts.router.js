@@ -9,7 +9,7 @@ const cartManager = new CartManager();
 router.get('/:cid', async (req,res)=>{
     const {cid} = req.params
     const ProductsByCartId = await cartManager.getProductsByCartId(cid)
-    if(!ProductsByCartId){res.status(404).send({status:'error', error: 'Carrito no encontrado'})}
+    if(!ProductsByCartId){return res.status(404).send({status:'error', error: 'Carrito no encontrado'})}
     res.send({status: 'success', payload: ProductsByCartId})
 })
 

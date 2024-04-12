@@ -11,20 +11,22 @@ router.get('/', async (req,res)=>{
     const products = await productManager.getProducts()
     if(limit){
         const limitedProducts = products.slice(0,limit)
-        res.send({status: 'success', payload: limitedProducts})
+        return res.send({status: 'success', payload: limitedProducts})
     }
     res.send({status: 'success', payload: products})
 })
 router.get('/:pid', async (req,res)=>{
     const {pid} = req.params
     const productFound = await productManager.getProductById(pid)
-    if(!productFound){res.status(404).send({status:'error', error: 'Producto no encontrado'})}
+    if(!productFound){
+        return res.status(404).send({status:'error', error: 'Producto no encontrado'})
+    }
     res.send({status: 'success', payload: productFound})
 })
 router.post('/', async (req,res)=>{
     const{code, title, description, price, stock}=req.body
     if (!code || !title || !description || !price || !stock) {
-        return res.send({status:'error', error:'Faltan Campos'})
+        return res.send({status:'error', error:'Faltan Campos'}) 
     }
     await productManager.addProduct(req.body)
     res.send({status: 'success', payload: req.body})
