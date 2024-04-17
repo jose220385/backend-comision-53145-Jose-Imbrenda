@@ -10,12 +10,14 @@
   },
   {
     "id": "c2dd77df-0dcd-489f-adbe-83a487a7117a",
-    "code": 112,
-    "title": "producto prueba 2",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
+    "code": "",
+    "title": "jose",
+    "description": "",
+    "price": "",
+    "thumbnail": "",
+    "stock": "",
+    "status": true,
+    "category": ""
   },
   {
     "id": "6a9d600e-3104-456e-a4cc-ff8dab55e3ab",
@@ -51,36 +53,14 @@
     "status": true
   },
   {
-    "id": "68d0b68b-ad56-4d55-aed5-745ee8f75cd6",
-    "code": "45678",
+    "id": "ade8a35b-b762-439a-a9dd-8366f3fcbe19",
+    "code": "92929292",
     "category": "Categoria 1",
-    "title": "otro producto por form",
-    "description": "otra descripcion",
-    "price": 83748,
+    "title": "producto a borrar",
+    "description": "aksclakcnslaksncalknsclas",
+    "price": 999000,
     "thumbnail": "./ruta nueva",
-    "stock": 98283,
-    "status": true
-  },
-  {
-    "id": "d1e8f7b4-f31c-4fe8-8213-64f1cb86f834",
-    "code": "45678",
-    "category": "Categoria 1",
-    "title": "Producto Form 3",
-    "description": "scalknskcanls",
-    "price": 345,
-    "thumbnail": "./ruta nueva",
-    "stock": 543,
-    "status": true
-  },
-  {
-    "id": "eef00723-22e1-449b-9178-6b5decd66862",
-    "code": "73489",
-    "category": "Categoria 1",
-    "title": "producto 4",
-    "description": "jsnxajksnxakjsnxa",
-    "price": 876,
-    "thumbnail": "./ruta nueva",
-    "stock": 789,
+    "stock": 2,
     "status": true
   }
 ]

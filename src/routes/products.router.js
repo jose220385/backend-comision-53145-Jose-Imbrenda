@@ -28,44 +28,23 @@ router.get('/:pid', async (req,res)=>{
 })
 
 router.post('/', async (req,res)=>{
- /*    const{code, title, description, price, stock}=req.body
-    if (!code || !title || !description || !price || !stock) {
-        return res.send({status:'error', error:'Faltan Campos'}) 
-    }
-     */
-    /* const result = await productManager.addProduct(req.body)
-    if(result.status === 'failed') return res.send(result) */
-    
-
-    /* await productManager.addProduct(req.body)
-    res.send({status: 'success', payload: req.body}) */
-    
-    
-    
     res.send(await productManager.addProduct(req.body))
     const {io} = req
     io.emit('realTimeProducts', await productManager.getProducts())
-    //socket.emit('realTimeProducts', readFile(`${__dirname}/products.json`))
 })
 
 router.put('/:pid', async (req,res)=>{
     const {pid} = req.params
-    /* const existProduct = await isExist(pid,`${__dirname}/products.json`)
-    if(!existProduct){
-        return res.status(404).send({status: 'error', error:`No se ha encontrado el producto que desea modificar`})
-    } */
     res.send(await productManager.updateProduct(pid,req.body))
+    const {io} = req
+    io.emit('realTimeProducts-upload', await productManager.getProducts())
 })
 
 router.delete('/:pid', async(req,res)=>{
     const {pid} = req.params
-    /* const existProduct = await isExist(pid,`${__dirname}/products.json`)
-    if(!existProduct){
-        return res.status(404).send({status: 'error', error:`No se ha encontrado el producto que desea borrar`})
-    }
-    await productManager.deleteProduct(pid) */
     res.send(await productManager.deleteProduct(pid))
-
+    const {io} = req
+    io.emit('realTimeProducts-delete', await productManager.getProducts())
 })
 
 

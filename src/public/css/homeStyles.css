@@ -38,3 +38,20 @@ h1 {
     display: block;
     margin: 10px;
 }
+
+.upDateform {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; 
+    height: 350px; 
+    background-color: #a8a8a8; 
+    border: 2px solid black;
+}
+
+#formulario-actualizacion > * {
+    display: block;
+    margin: 10px;
+}
+

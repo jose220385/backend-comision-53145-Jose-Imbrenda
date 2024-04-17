@@ -15,8 +15,8 @@
             <p>{{this.description}}</p>
             <p>{{this.price}}</p>
             <div class="buttonContainer">
-                <button id="borrar" >Borrar</button>
-                <button id="actualizar">Actualizar</button>
+                <button id="borrar" onclick="borrar()">Borrar</button>
+                <button id="actualizar" onclick="actualizar()">Actualizar</button>
             </div>
         </div>
         {{/each}}
@@ -41,6 +41,6 @@
 </div>
 </div>
 </main>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realTimeProducts.js"></script>
