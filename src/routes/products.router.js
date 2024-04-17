@@ -1,8 +1,6 @@
 import { Router } from "express";
 import ProductManager from '../classes/ProductManager.js'
-//import { isExist } from "../utils.js";
 import { __dirname } from "../utils.js";
-import { readFile } from "../utils.js";
 
 const router = new Router() 
 const productManager = new ProductManager();

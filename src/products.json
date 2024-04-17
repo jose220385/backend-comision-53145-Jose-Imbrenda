@@ -6,18 +6,20 @@
     "description": "Este es un producto prueba",
     "price": 300,
     "thumbnail": "Sin imagen",
-    "stock": 25
+    "stock": 25,
+    "status": true,
+    "category": "categoria 1"
   },
   {
     "id": "c2dd77df-0dcd-489f-adbe-83a487a7117a",
-    "code": "",
-    "title": "jose",
-    "description": "",
-    "price": "",
-    "thumbnail": "",
-    "stock": "",
+    "code": 111,
+    "title": "producto prueba 1",
+    "description": "Este es un producto prueba",
+    "price": 300,
+    "thumbnail": "Sin imagen",
+    "stock": 25,
     "status": true,
-    "category": ""
+    "category": "categoria 1"
   },
   {
     "id": "6a9d600e-3104-456e-a4cc-ff8dab55e3ab",
