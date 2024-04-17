@@ -2,27 +2,31 @@ import fs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
 import { __dirname } from '../utils.js';
 import { readFile, writeFile } from "../utils.js";
+import { isExist } from "../utils.js";
 
 export default class ProductManager {
   constructor() {
     (this.path = `${__dirname}/products.json`)
-
   }
 
   codeValidation=(object, products)=>{
     const codeValidation = products.some(
       (product) => object.code === product.code
     );
+
     if (codeValidation) {
-      throw new Error("El codigo corresponde a otro producto");
+      //throw new Error("El codigo corresponde a otro producto");
+      return {status:"Failed", payload: "El codigo corresponde a otro producto"}
     }
   }
 
   addProduct = async (object) => {
     try {
-
       const products = await readFile(this.path)
-
+      const {code,title,description,price,stock}=object
+      if (!code || !title || !description || !price || !stock) {
+        return ({status:'failed', msg:'Faltan Campos'}) 
+      }
       this.codeValidation(object,products)
 
       const newProduct = {
@@ -39,6 +43,8 @@ export default class ProductManager {
       await products.push(newProduct);
 
       await writeFile(products,this.path)
+
+      return ({status: "success", payload: newProduct})
 
     } catch (error) {
       console.log(error);
@@ -64,11 +70,10 @@ deleteProduct = async(id) =>{
 try{
   const products = await readFile(this.path)
   const indexToDelete = products.findIndex(p => p.id === id)
-  
+  if(indexToDelete < 0) return ({status:"failed", payload:"No se ha encontrado el producto que desea borrar"})
   products.splice(indexToDelete,1)
-
   await writeFile(products,this.path)
-
+  return({status:"success", payload: 'Producto Borrado Exitosamente'})
 } catch (error) {
   console.log(error);
 }
@@ -77,9 +82,11 @@ try{
 updateProduct = async(id,productToUpdate) =>{
   const products = await readFile(this.path)
   const indexToUpdate = products.findIndex(p => p.id === id)
+  if(indexToUpdate < 0) return ({status:"failed", payload:"No se ha encontrado el producto que desea modificar"})
   this.codeValidation(productToUpdate,products)
   products[indexToUpdate] = {...products[indexToUpdate], ...productToUpdate, id}
   await writeFile(products,this.path)
+  return({status:"success", payload: products[indexToUpdate]})
 }
 
 }

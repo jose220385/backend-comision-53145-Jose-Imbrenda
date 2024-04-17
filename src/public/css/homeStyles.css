@@ -1,0 +1,40 @@
+h1 {
+    color: blue;
+}
+
+#productsContainer{
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px
+}
+
+.productContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    min-width: 200x;
+    height: 270px;
+    border: 2px solid black;
+}
+
+.mainContainer {
+    display: grid;
+            grid-template-columns: 3fr 1fr;
+            background: center;
+            background-size: cover;
+            height: 100vh;
+
+}
+
+#formulario-producto{
+    margin-top: 150px;
+    border: 2px solid black;
+}
+
+#formulario-producto > * {
+    display: block;
+    margin: 10px;
+}

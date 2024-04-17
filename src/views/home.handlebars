@@ -1,0 +1,19 @@
+<div>
+    <h1>{{title}}</h1>
+    <div>
+    {{#if products}}
+        <h2>Los productos en existencia son:</h2>
+        {{#each products}}
+        <div>
+            <h3>{{this.title}}</h3>
+            <p>{{this.code}}</p>
+            <p>{{this.description}}</p>
+            <p>{{this.price}}</p>
+        </div>
+        {{/each}}
+    {{else}}
+        <h2>No hay productos</h2>
+    {{/if}}
+    </div>
+</div>
+<script src="/js/home.js"></script>

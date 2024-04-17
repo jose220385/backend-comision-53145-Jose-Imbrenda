@@ -42,8 +42,13 @@ export default class CartManager {
       addProductToCart = async (cid,quantity,pid) =>{
         try{
             const carts = await readFile(this.path)
-            
+            const products = await readFile(`${__dirname}/products.json`)
+
             const cartIndex = carts.findIndex(c => c.id === cid)
+            if(cartIndex < 1) return ({status: 'error', error:`No existe el carrito solicitado`})
+
+            const existProduct = products.some(p => p.id === pid)
+            if(!existProduct) return({status: 'error', error:`No existe el producto solicitado`})
 
             const productIndex = carts[cartIndex].products.findIndex(p => p.productId === pid)
 
@@ -54,7 +59,7 @@ export default class CartManager {
                 }
                 carts[cartIndex].products.push(productToAdd)
                 await writeFile(carts,this.path)
-                return
+                return ({status:"success", payload: productToAdd})
             }
 
             carts[cartIndex].products[productIndex].quantity += quantity

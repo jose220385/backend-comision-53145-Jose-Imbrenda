@@ -18,75 +18,69 @@
     "stock": 25
   },
   {
-    "id": "bfabfa40-8976-4d37-a737-1cb028e99163",
-    "code": 113,
-    "title": "producto prueba 3",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
+    "id": "6a9d600e-3104-456e-a4cc-ff8dab55e3ab",
+    "code": 234,
+    "category": "categoria",
+    "title": "Producto prueba 26354",
+    "description": "Descripcion de producto prueba",
+    "price": 500,
+    "thumbnail": "ruta",
+    "stock": 400,
+    "status": true
   },
   {
-    "id": "ecd681e3-6f9b-4d9c-a7bd-a69bec4e7f2e",
-    "code": 114,
-    "title": "producto prueba 4",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
+    "id": "546cb169-1586-4a3b-a847-408536c536e6",
+    "code": 24,
+    "category": "categoria",
+    "title": "Producto prueba 26354",
+    "description": "Descripcion de producto prueba",
+    "price": 500,
+    "thumbnail": "ruta",
+    "stock": 400,
+    "status": true
   },
   {
-    "id": "5c3e43e0-0648-4ef5-b5b7-bda3a224b0a9",
-    "code": 115,
-    "title": "producto prueba 5",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
+    "id": "9a9f4642-7ca7-4b60-9bd1-a72437a286ab",
+    "code": "99999",
+    "category": "Categoria 1",
+    "title": "Producto por Form",
+    "description": "descripcion",
+    "price": 23423,
+    "thumbnail": "./ruta nueva",
+    "stock": 23423,
+    "status": true
   },
   {
-    "id": "47f20f29-bcc6-491a-8c77-a61e00cc7eb6",
-    "code": 116,
-    "title": "producto prueba 6",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
+    "id": "68d0b68b-ad56-4d55-aed5-745ee8f75cd6",
+    "code": "45678",
+    "category": "Categoria 1",
+    "title": "otro producto por form",
+    "description": "otra descripcion",
+    "price": 83748,
+    "thumbnail": "./ruta nueva",
+    "stock": 98283,
+    "status": true
   },
   {
-    "id": "488a3e59-7a03-4638-972e-79fc66a48c6c",
-    "code": 117,
-    "title": "producto prueba 7",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
+    "id": "d1e8f7b4-f31c-4fe8-8213-64f1cb86f834",
+    "code": "45678",
+    "category": "Categoria 1",
+    "title": "Producto Form 3",
+    "description": "scalknskcanls",
+    "price": 345,
+    "thumbnail": "./ruta nueva",
+    "stock": 543,
+    "status": true
   },
   {
-    "id": "d5bda80b-59d6-4ccd-a06f-80b2c7355cbf",
-    "code": 118,
-    "title": "producto prueba 8",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
-  },
-  {
-    "id": "92bb9a12-ed63-410e-905b-d6e332cd0652",
-    "code": 119,
-    "title": "producto prueba 9",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
-    "stock": 25
-  },
-  {
-    "id": "61fc0d81-320e-4e10-af5e-e4add37555d7",
-    "code": 120,
-    "title": "producto modificado con PUT",
-    "description": "Este es un producto modificado",
-    "price": 600,
-    "thumbnail": "Sin imagen",
-    "stock": 25
+    "id": "eef00723-22e1-449b-9178-6b5decd66862",
+    "code": "73489",
+    "category": "Categoria 1",
+    "title": "producto 4",
+    "description": "jsnxajksnxakjsnxa",
+    "price": 876,
+    "thumbnail": "./ruta nueva",
+    "stock": 789,
+    "status": true
   }
 ]
