@@ -1,89 +1,48 @@
 const socket = io()
 
-socket.on('realTimeProducts', data =>{
-    if(data){
-        const productsContainer = document.getElementById('productsContainer')
-        productsContainer.innerHTML=''
-        data.forEach(p => {
-            const divProducto = document.createElement('div')
-            divProducto.innerHTML = `
-                                    <h3>${p.title}</h3>
-                                    <p>${p.code}</p>
-                                    <p>${p.description}</p>
-                                    <p>${p.price}</p>
-                                    <div class="buttonContainer">
-                                        <button id="borrar" onclick="borrar()">Borrar</button>
-                                        <button id="actualizar" onclick="actualizar()">Actualizar</button>
-                                    </div>
-                                    `
-            divProducto.className='productContainer'
-            divProducto.id= p.id
-            productsContainer.appendChild(divProducto)
+const socketOn =(emitName)=>{
+    socket.on(emitName, data =>{
+        if(data){
+            const productsContainer = document.getElementById('productsContainer')
+            productsContainer.innerHTML=''
+            data.forEach(p => {
+                const divProducto = document.createElement('div')
+                divProducto.innerHTML = `
+                                        <h3>${p.title}</h3>
+                                        <p>${p.code}</p>
+                                        <p>${p.description}</p>
+                                        <p>${p.price}</p>
+                                        <div class="buttonContainer">
+                                            <button id="borrar" onclick="borrar()">Borrar</button>
+                                            <button id="actualizar" onclick="actualizar()">Actualizar</button>
+                                        </div>
+                                        `
+                divProducto.className='productContainer'
+                divProducto.id= p.id
+                productsContainer.appendChild(divProducto)
+        })
+            
+        }
     })
-        
-    }
-})
+}
 
-socket.on('realTimeProducts-delete', data =>{
-    if(data){
-        const productsContainer = document.getElementById('productsContainer')
-        productsContainer.innerHTML=''
-        data.forEach(p => {
-            const divProducto = document.createElement('div')
-            divProducto.innerHTML = `
-                                    <h3>${p.title}</h3>
-                                    <p>${p.code}</p>
-                                    <p>${p.description}</p>
-                                    <p>${p.price}</p>
-                                    <div class="buttonContainer">
-                                        <button id="borrar" onclick="borrar()">Borrar</button>
-                                        <button id="actualizar" onclick="actualizar()">Actualizar</button>
-                                    </div>
-                                    `
-            divProducto.className='productContainer'
-            divProducto.id= p.id
-            productsContainer.appendChild(divProducto)
-    })
-        
-    }
-})
+socketOn('realTimeProducts')
+socketOn('realTimeProducts-delete')
+socketOn('realTimeProducts-upload')
 
-socket.on('realTimeProducts-upload', data =>{
-    if(data){
-        const productsContainer = document.getElementById('productsContainer')
-        productsContainer.innerHTML=''
-        data.forEach(p => {
-            const divProducto = document.createElement('div')
-            divProducto.innerHTML = `
-                                    <h3>${p.title}</h3>
-                                    <p>${p.code}</p>
-                                    <p>${p.description}</p>
-                                    <p>${p.price}</p>
-                                    <div class="buttonContainer">
-                                        <button id="borrar" onclick="borrar()">Borrar</button>
-                                        <button id="actualizar" onclick="actualizar()">Actualizar</button>
-                                    </div>
-                                    `
-            divProducto.className='productContainer'
-            divProducto.id= p.id
-            productsContainer.appendChild(divProducto)
-    })
-        
-    }
-})
 
 const formAddProduct = document.getElementById("formulario-producto")
 
 formAddProduct.addEventListener("submit", (e)=> {
     e.preventDefault()
     const newProduct = {
-        code: form.elements["code"].value,
-        category: form.elements["category"].value,
-        title: form.elements["title"].value,
-        description: form.elements["description"].value,
-        price: form.elements["price"].value,
-        thumbnail: form.elements["thumbnail"].value,
-        stock: form.elements["stock"].value,
+        code: formAddProduct.elements["code"].value,
+        category: formAddProduct.elements["category"].value,
+        title: formAddProduct.elements["title"].value,
+        description: formAddProduct.elements["description"].value,
+        price: formAddProduct.elements["price"].value,
+        thumbnail: formAddProduct.elements["thumbnail"].value,
+        stock: formAddProduct.elements["stock"].value,
     }
 
     fetch('/api/products', {
@@ -110,8 +69,6 @@ formAddProduct.addEventListener("submit", (e)=> {
 
 const borrar =()=>{
     const id = document.activeElement.parentNode.parentNode.id
-    console.log(id)
-
     fetch(`/api/products/${id}`, {
         method: "DELETE"
     })
@@ -147,10 +104,10 @@ const actualizar =()=>{
         <input type="number" name="stock" placeholder="Stock del producto">
         <textarea name="description" placeholder="Descripción del producto"></textarea>
         <button type="submit">Actualizar</button>
-        <button>Cancelar</button>
+        <button id="cancelarUpload" >Cancelar</button>
     </form>
     `
-    
+
     const updateForm = document.getElementById("formulario-actualizacion")
 
     updateForm.addEventListener("submit", (e)=> {
@@ -181,11 +138,18 @@ const actualizar =()=>{
     })
     .then(data => {
         console.log(data);
+        upDateform.parentNode.removeChild(upDateform)
     })
     .catch(error => {
         console.error("Error:", error);
     }); 
 
     })
+
+    const cancelUpload = document.getElementById("cancelarUpload")
+    cancelUpload.addEventListener('click',(e)=>{
+        upDateform.parentNode.removeChild(upDateform)
+    })
+    
 
 }

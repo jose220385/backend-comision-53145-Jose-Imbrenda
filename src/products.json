@@ -1,36 +1,36 @@
 [
   {
-    "id": "8d23bd69-6cee-416b-b6d0-52dac6c6df98",
     "code": 111,
-    "title": "producto prueba 1",
+    "title": "Producto 3",
     "description": "Este es un producto prueba",
     "price": 300,
     "thumbnail": "Sin imagen",
     "stock": 25,
+    "category": "categoria 1",
     "status": true,
-    "category": "categoria 1"
+    "id": "8d23bd69-6cee-416b-b6d0-52dac6c6df98"
   },
   {
-    "id": "c2dd77df-0dcd-489f-adbe-83a487a7117a",
     "code": 111,
-    "title": "producto prueba 1",
+    "title": "juan",
     "description": "Este es un producto prueba",
     "price": 300,
     "thumbnail": "Sin imagen",
     "stock": 25,
+    "category": "Cat 2",
     "status": true,
-    "category": "categoria 1"
+    "id": "c2dd77df-0dcd-489f-adbe-83a487a7117a"
   },
   {
-    "id": "6a9d600e-3104-456e-a4cc-ff8dab55e3ab",
     "code": 234,
-    "category": "categoria",
-    "title": "Producto prueba 26354",
+    "title": "jose",
     "description": "Descripcion de producto prueba",
     "price": 500,
     "thumbnail": "ruta",
     "stock": 400,
-    "status": true
+    "category": "categoria",
+    "status": true,
+    "id": "6a9d600e-3104-456e-a4cc-ff8dab55e3ab"
   },
   {
     "id": "546cb169-1586-4a3b-a847-408536c536e6",
@@ -52,17 +52,6 @@
     "price": 23423,
     "thumbnail": "./ruta nueva",
     "stock": 23423,
-    "status": true
-  },
-  {
-    "id": "ade8a35b-b762-439a-a9dd-8366f3fcbe19",
-    "code": "92929292",
-    "category": "Categoria 1",
-    "title": "producto a borrar",
-    "description": "aksclakcnslaksncalknsclas",
-    "price": 999000,
-    "thumbnail": "./ruta nueva",
-    "stock": 2,
     "status": true
   }
 ]

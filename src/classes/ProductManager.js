@@ -84,7 +84,18 @@ updateProduct = async(id,productToUpdate) =>{
   const indexToUpdate = products.findIndex(p => p.id === id)
   if(indexToUpdate < 0) return ({status:"failed", payload:"No se ha encontrado el producto que desea modificar"})
   this.codeValidation(productToUpdate,products)
-  products[indexToUpdate] = {...products[indexToUpdate], ...productToUpdate, id}
+  products[indexToUpdate] = {
+      code: productToUpdate.code === ""? products[indexToUpdate].code : productToUpdate.code,
+      title: productToUpdate.title === ""? products[indexToUpdate].title : productToUpdate.title,
+      description: productToUpdate.description === ""? products[indexToUpdate].description : productToUpdate.description,
+      price: productToUpdate.price === ""? products[indexToUpdate].price : productToUpdate.price,
+      thumbnail: productToUpdate.thumbnail === ""? products[indexToUpdate].thumbnail : productToUpdate.thumbnail,
+      stock: productToUpdate.stock === ""? products[indexToUpdate].stock : productToUpdate.stock,
+      category: productToUpdate.category === ""? products[indexToUpdate].category : productToUpdate.category,
+      status: true,
+      id
+    //...products[indexToUpdate], ...productToUpdate, id
+  }
   await writeFile(products,this.path)
   return({status:"success", payload: products[indexToUpdate]})
 }
