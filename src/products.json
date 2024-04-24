@@ -22,7 +22,7 @@
     "id": "c2dd77df-0dcd-489f-adbe-83a487a7117a"
   },
   {
-    "code": 234,
+    "code": "99998",
     "title": "jose",
     "description": "Descripcion de producto prueba",
     "price": 500,
@@ -33,15 +33,15 @@
     "id": "6a9d600e-3104-456e-a4cc-ff8dab55e3ab"
   },
   {
-    "id": "546cb169-1586-4a3b-a847-408536c536e6",
     "code": 24,
-    "category": "categoria",
-    "title": "Producto prueba 26354",
+    "title": "Nombre nuevo",
     "description": "Descripcion de producto prueba",
     "price": 500,
     "thumbnail": "ruta",
     "stock": 400,
-    "status": true
+    "category": "categoria",
+    "status": true,
+    "id": "546cb169-1586-4a3b-a847-408536c536e6"
   },
   {
     "id": "9a9f4642-7ca7-4b60-9bd1-a72437a286ab",

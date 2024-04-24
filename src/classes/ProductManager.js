@@ -1,36 +1,25 @@
-import fs from 'fs'
-import { v4 as uuidv4 } from 'uuid';
+//import fs from 'fs'
+//import { v4 as uuidv4 } from 'uuid';
 import { __dirname } from '../utils.js';
 import { readFile, writeFile } from "../utils.js";
-import { isExist } from "../utils.js";
+import { productModel } from '../models/product.model.js';
+//import { isExist } from "../utils.js";
 
 export default class ProductManager {
   constructor() {
     (this.path = `${__dirname}/products.json`)
   }
 
-  codeValidation=(object, products)=>{
-    const codeValidation = products.some(
-      (product) => object.code === product.code
-    );
-
-    if (codeValidation) {
-      //throw new Error("El codigo corresponde a otro producto");
-      return {status:"Failed", payload: "El codigo corresponde a otro producto"}
-    }
-  }
-
   addProduct = async (object) => {
     try {
-      const products = await readFile(this.path)
-      const {code,title,description,price,stock}=object
-      if (!code || !title || !description || !price || !stock) {
-        return ({status:'failed', msg:'Faltan Campos'}) 
-      }
-      this.codeValidation(object,products)
+      const query = productModel.where({code: object.code})
+      const codeValidation = await query.findOne().lean()
+    if (codeValidation) {
+      console.log('Error');
+      return {status:"Failed", payload: "El codigo corresponde a otro producto"}
+    }
 
-      const newProduct = {
-        id: uuidv4(),
+      const newProduct = await productModel.create({
         code: object.code,
         category: object.category,
         title: object.title,
@@ -39,10 +28,7 @@ export default class ProductManager {
         thumbnail: object.thumbnail,
         stock: parseInt(object.stock),
         status: true
-      };
-      await products.push(newProduct);
-
-      await writeFile(products,this.path)
+      });
 
       return ({status: "success", payload: newProduct})
 
@@ -52,14 +38,15 @@ export default class ProductManager {
   };
 
   getProducts = async() => {
-    const products = await readFile(this.path)
+    const products = await productModel.find().lean()
     return products;
   }
 
   getProductById = async(id) =>{
     try{
-    const products = await readFile(this.path)
-    const productFound = products.find((product) => product.id === id);
+    //const products = await readFile(this.path)
+    //const productFound = products.find((product) => product.id === id);
+    const productFound = await productModel.findById(id).lean()
     return productFound;
   } catch (error) {
     console.log(error);
@@ -68,11 +55,12 @@ export default class ProductManager {
 
 deleteProduct = async(id) =>{
 try{
-  const products = await readFile(this.path)
+ /*  const products = await readFile(this.path)
   const indexToDelete = products.findIndex(p => p.id === id)
   if(indexToDelete < 0) return ({status:"failed", payload:"No se ha encontrado el producto que desea borrar"})
   products.splice(indexToDelete,1)
-  await writeFile(products,this.path)
+  await writeFile(products,this.path) */
+  await productModel.findOneAndDelete(id)
   return({status:"success", payload: 'Producto Borrado Exitosamente'})
 } catch (error) {
   console.log(error);
@@ -80,73 +68,27 @@ try{
 }
 
 updateProduct = async(id,productToUpdate) =>{
-  const products = await readFile(this.path)
+  /* const products = await readFile(this.path)
   const indexToUpdate = products.findIndex(p => p.id === id)
   if(indexToUpdate < 0) return ({status:"failed", payload:"No se ha encontrado el producto que desea modificar"})
-  this.codeValidation(productToUpdate,products)
-  products[indexToUpdate] = {
-      code: productToUpdate.code === ""? products[indexToUpdate].code : productToUpdate.code,
-      title: productToUpdate.title === ""? products[indexToUpdate].title : productToUpdate.title,
-      description: productToUpdate.description === ""? products[indexToUpdate].description : productToUpdate.description,
-      price: productToUpdate.price === ""? products[indexToUpdate].price : productToUpdate.price,
-      thumbnail: productToUpdate.thumbnail === ""? products[indexToUpdate].thumbnail : productToUpdate.thumbnail,
-      stock: productToUpdate.stock === ""? products[indexToUpdate].stock : productToUpdate.stock,
-      category: productToUpdate.category === ""? products[indexToUpdate].category : productToUpdate.category,
+  this.codeValidation(productToUpdate,products)*/
+  //console.log(productToUpdate);
+  //const productToUpdate = JSON.parse(product)
+  const productNotUpdated = await this.getProductById(id)
+  const updatedProduct = {
+      code: productToUpdate.code === ""? productNotUpdated.code : productToUpdate.code,
+      title: productToUpdate.title === ""? productNotUpdated.title : productToUpdate.title,
+      description: productToUpdate.description === ""? productNotUpdated.description : productToUpdate.description,
+      price: productToUpdate.price === ""? productNotUpdated.price : productToUpdate.price,
+      thumbnail: productToUpdate.thumbnail === ""? productNotUpdated.thumbnail : productToUpdate.thumbnail,
+      stock: productToUpdate.stock === ""? productNotUpdated.stock : productToUpdate.stock,
+      category: productToUpdate.category === ""? productNotUpdated.category : productToUpdate.category,
       status: true,
-      id
-    //...products[indexToUpdate], ...productToUpdate, id
   }
-  await writeFile(products,this.path)
-  return({status:"success", payload: products[indexToUpdate]})
+  await productModel.findOneAndUpdate({_id:id}, updatedProduct, {new:true})
+  return({status:"success", payload: updatedProduct})
 }
 
 }
 
 
-
-//Test de funcion
-
-//node --watch ./src/classes/ProductManager.js
-
-/* const productManager = new ProductManager();
-
-
- const test = async() =>{
-    console.log(await productManager.getProducts())
-    console.log('------------------------')
-    const productoEncontrado = await productManager.getProductById("61fc0d81-320e-4e10-af5e-e4add37555d7")
-    console.log(productoEncontrado) 
-}
-
-test()  */
-
-
-
-//Agrego los 10 productos:
-
-/* const productsUpLoad = async() =>{
-  try{
-    let code = 111
-    for (let i = 0; i<10; i++){
-        await productManager.addProduct({
-            title: "producto prueba " + (i+1),
-            category: "categoria 1",
-            description: "Este es un producto prueba",
-            price: 300,
-            thumbnail: "Sin imagen",
-            code: code,
-            stock: 25,
-        })
-        code ++
-    }
-  } catch (err){
-    console.log(err)
-  }
-} 
-
-productsUpLoad() */
-
-
-//productManager.deleteProduct("66a2fa0f-a759-43ab-9d68-2e5cfc0e2e92")
-
-//productManager.updateProduct("0e2eb4a9-e2bb-428e-96ea-6e9c59ff995d",object3)

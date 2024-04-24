@@ -5,6 +5,7 @@ import viewRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
 import { Server } from 'socket.io'
+import { connect } from './config/db.js'
 
 const app = express()
 
@@ -22,6 +23,8 @@ function productsSocket(io){
         next()
     })
 }
+
+connect()
 
 app.use(productsSocket(io))
 

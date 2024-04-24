@@ -25,8 +25,8 @@ export const writeFile = async(file,path)=>{
   }
   }
 
-export const isExist = async (id,path) =>{
+/* export const isExist = async (id,path) =>{
     const array = await readFile(path)
     const isExist = array.some(c => c.id === id)
     return isExist
-}
+} */

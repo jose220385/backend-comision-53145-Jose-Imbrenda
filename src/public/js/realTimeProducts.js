@@ -18,7 +18,8 @@ const socketOn =(emitName)=>{
                                         </div>
                                         `
                 divProducto.className='productContainer'
-                divProducto.id= p.id
+                console.log(p._id)
+                divProducto.id= p._id
                 productsContainer.appendChild(divProducto)
         })
             
@@ -69,6 +70,7 @@ formAddProduct.addEventListener("submit", (e)=> {
 
 const borrar =()=>{
     const id = document.activeElement.parentNode.parentNode.id
+    console.log(id);
     fetch(`/api/products/${id}`, {
         method: "DELETE"
     })
@@ -89,6 +91,7 @@ const borrar =()=>{
 
 const actualizar =()=>{
     idToUpDate = document.activeElement.parentNode.parentNode.id
+    console.log(idToUpDate);
     const upDateform = document.createElement('div')
     const main = document.getElementsByTagName('main')
     upDateform.className = 'upDateform'
@@ -132,7 +135,7 @@ const actualizar =()=>{
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error("Error al borrar el producto");
+            throw new Error("Error al modificar el producto");
         }
         return response.json()
     })
