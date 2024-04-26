@@ -30,6 +30,7 @@ const socketOn =(emitName)=>{
 socketOn('realTimeProducts')
 socketOn('realTimeProducts-delete')
 socketOn('realTimeProducts-upload')
+socketOn('massiveProductsUpload')
 
 
 const formAddProduct = document.getElementById("formulario-producto")

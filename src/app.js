@@ -6,6 +6,7 @@ import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
 import { Server } from 'socket.io'
 import { connect } from './config/db.js'
+import uploadRouter from './routes/upload.router.js'
 
 const app = express()
 
@@ -39,6 +40,7 @@ app.set('view engine', 'handlebars')
 
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
+app.use('/api/upload', uploadRouter)
 
 app.use('/', viewRouter)
 

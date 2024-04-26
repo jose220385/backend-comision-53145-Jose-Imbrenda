@@ -42,7 +42,7 @@ export default class ProductManager {
     return products;
   }
 
-  getProductById = async(id) =>{
+ /*  getProductById = async(id) =>{
     try{
     //const products = await readFile(this.path)
     //const productFound = products.find((product) => product.id === id);
@@ -52,7 +52,7 @@ export default class ProductManager {
     console.log(error);
   }
 }
-
+ */
 deleteProduct = async(id) =>{
 try{
  /*  const products = await readFile(this.path)
@@ -74,7 +74,7 @@ updateProduct = async(id,productToUpdate) =>{
   this.codeValidation(productToUpdate,products)*/
   //console.log(productToUpdate);
   //const productToUpdate = JSON.parse(product)
-  const productNotUpdated = await this.getProductById(id)
+  const productNotUpdated = await productModel.findById(id).lean()
   const updatedProduct = {
       code: productToUpdate.code === ""? productNotUpdated.code : productToUpdate.code,
       title: productToUpdate.title === ""? productNotUpdated.title : productToUpdate.title,
