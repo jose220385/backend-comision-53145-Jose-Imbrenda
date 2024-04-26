@@ -3,9 +3,11 @@ import { uploader } from "../utils/multer.js";
 import { __dirname } from "../utils.js";
 import xlsx from "xlsx"
 import { productModel } from "../models/product.model.js";
+import ProductManager from '../classes/ProductManager.js'
 
 
 const router = new Router() 
+const productManager = new ProductManager()
 
 router.post('/bdFile', uploader.single('bdFile'), async (req,res)=>{
     if(!req.file){
@@ -30,24 +32,6 @@ router.post('/bdFile', uploader.single('bdFile'), async (req,res)=>{
 
     const {io} = req
     io.emit('massiveProductsUpload', await productManager.getProducts())
-
-    /* const bd = jsonData.map(e =>{
-        return(
-            e.code,
-            e.title,
-            e.category,
-            e.brand,
-            e.provider,
-            e.price,
-            e.stock,
-            e.thumbnail,
-            e.status
-        )
-    }
-
-    )
-
-    console.log(bd); */
 
     await res.send({status: "success", payload: 'Archivo agregado exitosamente'})
 })

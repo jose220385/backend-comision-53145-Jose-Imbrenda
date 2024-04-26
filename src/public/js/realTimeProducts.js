@@ -157,3 +157,41 @@ const actualizar =()=>{
     
 
 }
+
+const formularioCargaMasiva = document.getElementById("formulario-cargaMasiva")
+
+formularioCargaMasiva.addEventListener("submit", (e)=> {
+    e.preventDefault()
+    /* const newProduct = {
+        code: formAddProduct.elements["code"].value,
+        category: formAddProduct.elements["category"].value,
+        title: formAddProduct.elements["title"].value,
+        description: formAddProduct.elements["description"].value,
+        price: formAddProduct.elements["price"].value,
+        thumbnail: formAddProduct.elements["thumbnail"].value,
+        stock: formAddProduct.elements["stock"].value,
+    } */
+
+    const file = new FormData(formularioCargaMasiva)
+
+    fetch('/api/upload/bdFile', {
+        method: "POST",
+        /* headers: {
+            "Content-Type": "application/json"
+        }, */
+        body: file
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error al agregar el producto");
+        }
+        return response.json()
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+})

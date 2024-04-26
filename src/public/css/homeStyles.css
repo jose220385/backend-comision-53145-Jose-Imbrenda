@@ -29,12 +29,17 @@ h1 {
 
 }
 
-#formulario-producto{
-    margin-top: 150px;
+
+#formulario-cargaMasiva{
+    margin-top: 127px;
+}
+
+.formularios{
+    margin: 20px;
     border: 2px solid black;
 }
 
-#formulario-producto > * {
+.formularios > * {
     display: block;
     margin: 10px;
 }

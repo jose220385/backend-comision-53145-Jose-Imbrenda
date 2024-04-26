@@ -26,13 +26,13 @@
     
     </div>
 </div>
-<div>
-    <form action="/api/upload/bdFile" method="POST" enctype="multipart/form-data" id="formulario-cargaMasiva">
+<div class="aside">
+    <form {{!-- action="/api/upload/bdFile" method="POST" enctype="multipart/form-data" --}} id="formulario-cargaMasiva" class="formularios">
         <h4>Carga Masiva de Productos mediante excel:</h4>
         <input type="file" name="bdFile" placeholder="Inserte el archivo" required>
         <button type="submit">Agregar Productos</button>
     </form>
-    <form id="formulario-producto">
+    <form id="formulario-producto" class="formularios">
         <h4>Formulario para agregar productos:</h4>
         <input type="text" name="title" placeholder="Nombre del producto" required>
         <input type="text" name="code" placeholder="Codigo del producto" required>
