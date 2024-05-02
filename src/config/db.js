@@ -5,5 +5,5 @@ const password = () =>{
     return password
 }
 export const connect = ()=>{
-    mongoose.connect(`mongodb+srv://jsimbrenda:${password()}@papelerasangerardo.wphphau.mongodb.net/?retryWrites=true&w=majority&appName=papeleraSanGerardo`)
+    mongoose.connect(`mongodb+srv://jsimbrenda:${password()}@papelerasangerardo.wphphau.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=papeleraSanGerardo`)
 }

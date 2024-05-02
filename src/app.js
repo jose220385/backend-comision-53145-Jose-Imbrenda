@@ -3,10 +3,11 @@ import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import viewRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
-import { __dirname } from './utils.js'
+import { __dirname } from './utils/utils.js'
 import { Server } from 'socket.io'
 import { connect } from './config/db.js'
 import uploadRouter from './routes/upload.router.js'
+import {dirname} from "path"
 
 const app = express()
 
@@ -32,10 +33,10 @@ app.use(productsSocket(io))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-app.use(express.static(`${__dirname}/public`))
+app.use(express.static(`${dirname(__dirname)}/public`))
 
 app.engine('handlebars', handlebars.engine())
-app.set('views', `${__dirname}/views`)
+app.set('views', `${dirname(__dirname)}/views`)
 app.set('view engine', 'handlebars')
 
 app.use('/api/products', productsRouter)

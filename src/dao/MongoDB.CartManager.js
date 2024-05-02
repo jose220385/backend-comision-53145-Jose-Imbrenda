@@ -1,17 +1,21 @@
-import fs from 'fs'
-import { v4 as uuidv4 } from 'uuid';
-import { __dirname } from '../utils.js';
-import { readFile, writeFile } from "../utils.js";
 
-export default class CartManager {
+import { v4 as uuidv4 } from 'uuid';
+import { __dirname } from '../utils/utils.js';
+import { readFile, writeFile } from "../utils/utils.js";
+import {dirname} from "path"
+import { cartModel } from './models/cart.model.js';
+import { productModel } from './models/product.model.js';
+
+
+export default class MDBCartManager {
     constructor() {
-      (this.path = `${__dirname}/carts.json`)
+      (this.path = `${dirname(__dirname)}/carts.json`)
     }
 
       addCart = async()=>{
         try {
 
-            const carts = await readFile(this.path)
+            /* const carts = await readFile(this.path)
       
             const newCart = {
               id: uuidv4(),
@@ -19,8 +23,11 @@ export default class CartManager {
             };
             await carts.push(newCart);
       
-            await writeFile(carts,this.path)
-      
+            await writeFile(carts,this.path) */
+
+            const newCart = await cartModel.create({products: []})
+            return ({status: "success", payload: newCart})
+
           } catch (error) {
             console.log(error);
           }
@@ -28,10 +35,8 @@ export default class CartManager {
 
         getProductsByCartId = async(id) =>{
             try{
-            const carts = await readFile(this.path)
-            const cartFound = carts.find((cart) => cart.id === id);
-            
-            return cartFound.products;
+            const cartFound = await cartModel.findById(id).lean()
+            return cartFound.products
           } catch (error) {
             console.log(error);
           }
@@ -41,8 +46,8 @@ export default class CartManager {
 
       addProductToCart = async (cid,quantity,pid) =>{
         try{
-            const carts = await readFile(this.path)
-            const products = await readFile(`${__dirname}/products.json`)
+            /* const carts = await readFile(this.path)
+            const products = await readFile(`${dirname(__dirname)}/products.json`)
 
             const cartIndex = carts.findIndex(c => c.id === cid)
             if(cartIndex < 1) return ({status: 'error', error:`No existe el carrito solicitado`})
@@ -64,7 +69,13 @@ export default class CartManager {
 
             carts[cartIndex].products[productIndex].quantity += quantity
 
-            await writeFile(carts,this.path)
+            await writeFile(carts,this.path) */
+
+            const cart = await cartModel.findOneAndUpdate(
+              { _id: cid },
+              { $push: { products: { id: pid, quantity} } }, 
+              { new: true })
+            
 
           } catch (error) {
             console.log(error);

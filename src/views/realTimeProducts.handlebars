@@ -9,7 +9,7 @@
     {{#if products}}
         
         {{#each products}}
-        <div class="productContainer" id={{this.id}}>
+        <div class="productContainer" id={{this._id}}>
             <h3>{{this.title}}</h3>
             <p>{{this.code}}</p>
             <p>{{this.description}}</p>
@@ -26,7 +26,7 @@
     
     </div>
 </div>
-<div class="aside">
+<div>
     <form {{!-- action="/api/upload/bdFile" method="POST" enctype="multipart/form-data" --}} id="formulario-cargaMasiva" class="formularios">
         <h4>Carga Masiva de Productos mediante excel:</h4>
         <input type="file" name="bdFile" placeholder="Inserte el archivo" required>
@@ -37,6 +37,8 @@
         <input type="text" name="title" placeholder="Nombre del producto" required>
         <input type="text" name="code" placeholder="Codigo del producto" required>
         <input type="text" name="category" placeholder="Categoría del producto" required>
+        <input type="text" name="brand" placeholder="Marca del producto" required>
+        <input type="text" name="provider" placeholder="Proveedor" required>
         <input type="text" name="thumbnail" placeholder="Ruta de la foto" required>
         <input type="number" name="price" placeholder="Precio del producto" required>
         <input type="number" name="stock" placeholder="Stock del producto" required>

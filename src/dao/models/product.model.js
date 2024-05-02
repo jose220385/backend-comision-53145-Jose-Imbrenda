@@ -27,8 +27,7 @@ const schema = new mongoose.Schema({
     required: true,
   },
   brand: {
-    type: String,
-    required: true,
+    type: String
   },
   provider: String,
   status: Boolean,

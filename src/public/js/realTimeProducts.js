@@ -18,7 +18,7 @@ const socketOn =(emitName)=>{
                                         </div>
                                         `
                 divProducto.className='productContainer'
-                console.log(p._id)
+                //console.log(p._id)
                 divProducto.id= p._id
                 productsContainer.appendChild(divProducto)
         })
@@ -45,6 +45,8 @@ formAddProduct.addEventListener("submit", (e)=> {
         price: formAddProduct.elements["price"].value,
         thumbnail: formAddProduct.elements["thumbnail"].value,
         stock: formAddProduct.elements["stock"].value,
+        brand: formAddProduct.elements["brand"].value,
+        provider: formAddProduct.elements["provider"].value
     }
 
     fetch('/api/products', {
@@ -162,23 +164,11 @@ const formularioCargaMasiva = document.getElementById("formulario-cargaMasiva")
 
 formularioCargaMasiva.addEventListener("submit", (e)=> {
     e.preventDefault()
-    /* const newProduct = {
-        code: formAddProduct.elements["code"].value,
-        category: formAddProduct.elements["category"].value,
-        title: formAddProduct.elements["title"].value,
-        description: formAddProduct.elements["description"].value,
-        price: formAddProduct.elements["price"].value,
-        thumbnail: formAddProduct.elements["thumbnail"].value,
-        stock: formAddProduct.elements["stock"].value,
-    } */
 
     const file = new FormData(formularioCargaMasiva)
 
     fetch('/api/upload/bdFile', {
         method: "POST",
-        /* headers: {
-            "Content-Type": "application/json"
-        }, */
         body: file
     })
     .then(response => {

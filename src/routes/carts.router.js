@@ -1,10 +1,11 @@
 import { Router } from "express";
-import CartManager from '../classes/CartManager.js'
+//import CartManager from '../dao/FS.CartManager.js'
 //import { isExist} from "../utils.js";
-import { __dirname } from "../utils.js";
+import MDBCartManager from "../dao/MongoDB.CartManager.js";
+import { __dirname } from "../utils/utils.js";
 
 const router = new Router() 
-const cartManager = new CartManager();
+const cartManager = new MDBCartManager();
 
 router.get('/:cid', async (req,res)=>{
     const {cid} = req.params
