@@ -25,17 +25,15 @@ router.get('/realTimeProducts', async (req,res)=>{
 
 router.get('/chat', async (req,res)=>{
     const messages = await messageModel.find().lean()
-    const {io} = req
-    io.on('message', data => {
-        messageModel.create(data)
-        // emitimos los mensajes
-        io.emit('messageLogs', messages)
-    })
     res.render('chat', {
         title: 'Chat:',
         messages,
         styles: 'homeStyles.css'
     })
+   
+    const {io} = req
+    
+    
 })
 
 

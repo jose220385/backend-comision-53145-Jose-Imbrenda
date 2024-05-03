@@ -18,7 +18,6 @@ const socketOn =(emitName)=>{
                                         </div>
                                         `
                 divProducto.className='productContainer'
-                //console.log(p._id)
                 divProducto.id= p._id
                 productsContainer.appendChild(divProducto)
         })

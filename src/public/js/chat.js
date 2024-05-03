@@ -1,17 +1,16 @@
-const socket = io()
+    const socket = io()
     let user
     
-    Swal.fire({
-        title: 'Identifícate',
-        input: 'text',
-        text: 'Ingresa el usuario para identificarte en el chat',
-        inputValidator: value => {
-            return !value && 'Necesitas escribir un nombre de usuario para continuar'
+    swal({
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+        content: {
+            element:"input",
         },
-        allowOutsideClick: false
+        text: 'Ingresa el tu e-mail para identificarte en el chat',
     })
     .then(result => {
-        user = result.value
+        user = result
         console.log(user)
     })
 
@@ -20,6 +19,7 @@ const socket = io()
     chatBox.addEventListener('keyup', evt => {
         if(evt.key === 'Enter'){
             if(chatBox.value.trim().length > 0 ){
+                console.log(chatBox.value)
                 socket.emit('message', { user, message: chatBox.value })
                 chatBox.value = ''
             }
@@ -28,7 +28,8 @@ const socket = io()
     })
 
     socket.on('messageLogs', data => {
-        //console.log('Mensajes del server', data)
+        console.log('Mensajes del server', data)
+        console.log(data);
         let log = document.getElementById('messageLog')
 
         let messages = ''

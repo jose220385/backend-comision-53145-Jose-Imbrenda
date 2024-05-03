@@ -4,7 +4,11 @@
         <input type="text" name="chatBox" id="chatBox">
     </div>
     <div>
-        <ul id="messageLog"></ul>
+        <ul id="messageLog">
+            {{#each messages}}
+                <li>{{this.user}} -  dice: {{this.message}}</li><br>
+            {{/each}}
+        </ul>
     </div>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>

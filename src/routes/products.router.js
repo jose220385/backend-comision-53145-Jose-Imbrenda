@@ -5,8 +5,6 @@ import { __dirname } from "../utils/utils.js";
 const router = new Router() 
 const mdbProductManager = new MDBProductManager();
 
-
-
 router.get('/', async (req,res)=>{
     let {limit} = req.query
     const products = await mdbProductManager.getProducts()

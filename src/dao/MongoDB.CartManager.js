@@ -14,20 +14,8 @@ export default class MDBCartManager {
 
       addCart = async()=>{
         try {
-
-            /* const carts = await readFile(this.path)
-      
-            const newCart = {
-              id: uuidv4(),
-              products: []
-            };
-            await carts.push(newCart);
-      
-            await writeFile(carts,this.path) */
-
             const newCart = await cartModel.create({products: []})
             return ({status: "success", payload: newCart})
-
           } catch (error) {
             console.log(error);
           }
@@ -72,11 +60,12 @@ export default class MDBCartManager {
             await writeFile(carts,this.path) */
 
             const cart = await cartModel.findOneAndUpdate(
-              { _id: cid },
-              { $push: { products: { id: pid, quantity} } }, 
+              { _id: cid, 'products.id':pid },
+              /* { $addToSet: { products: { id: pid, quantity} } }, */
+              { $inc: { 'products.$.quantity': quantity }}, 
               { new: true })
             
-
+              return ({status: "success", payload: cart})
           } catch (error) {
             console.log(error);
           }
