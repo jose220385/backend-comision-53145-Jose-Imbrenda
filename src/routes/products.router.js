@@ -43,5 +43,15 @@ router.delete('/:pid', async(req,res)=>{
     io.emit('realTimeProducts-delete', await mdbProductManager.getProducts())
 })
 
+//CRUD Categorias:
+
+router.post('/categories', async (req,res)=>{
+    res.send(await mdbProductManager.addCategory(req.body))
+})
+
+router.post('/subCategories', async (req,res)=>{
+    res.send(await mdbProductManager.addSubCategory(req.body))
+})
+
 
 export default router

@@ -34,38 +34,33 @@ export default class MDBCartManager {
 
       addProductToCart = async (cid,quantity,pid) =>{
         try{
-            /* const carts = await readFile(this.path)
-            const products = await readFile(`${dirname(__dirname)}/products.json`)
+            const query = cartModel.where({ _id: cid, 'products.id':pid })
+            const productExist = await query.findOne()
 
-            const cartIndex = carts.findIndex(c => c.id === cid)
-            if(cartIndex < 1) return ({status: 'error', error:`No existe el carrito solicitado`})
-
-            const existProduct = products.some(p => p.id === pid)
-            if(!existProduct) return({status: 'error', error:`No existe el producto solicitado`})
-
-            const productIndex = carts[cartIndex].products.findIndex(p => p.productId === pid)
-
-            if(productIndex<0){ 
-                const productToAdd = {
-                    productId: pid,
-                    quantity: quantity
-                }
-                carts[cartIndex].products.push(productToAdd)
-                await writeFile(carts,this.path)
-                return ({status:"success", payload: productToAdd})
+            if(!productExist){
+                const cart = await cartModel.findOneAndUpdate(
+                { _id: cid},
+                { $addToSet: { products: { id: pid, quantity} } },
+                { new: true })
+                return ({status: "success", payload: cart})
             }
-
-            carts[cartIndex].products[productIndex].quantity += quantity
-
-            await writeFile(carts,this.path) */
-
-            const cart = await cartModel.findOneAndUpdate(
-              { _id: cid, 'products.id':pid },
-              /* { $addToSet: { products: { id: pid, quantity} } }, */
-              { $inc: { 'products.$.quantity': quantity }}, 
-              { new: true })
             
+            const addProduct = await cartModel.findOneAndUpdate(
+              { _id: cid, 'products.id':pid },
+              { $inc: { 'products.$.quantity': quantity }}, 
+              { new: true,upsert: true })
+              return ({status: "success", payload: addProduct})
+              
+            /* const cart = await cartModel.findById(cid).then(async cart =>{
+              const existProduct = cart.products.find(item => item.id === pid)
+              console.log(existProduct);
+              existProduct? existProduct.quantity += quantity : cart.products.push({_id:pid,quantity})
+              console.log(existProduct);
+              console.log(await cart.save())
               return ({status: "success", payload: cart})
+            }) */
+            
+            
           } catch (error) {
             console.log(error);
           }

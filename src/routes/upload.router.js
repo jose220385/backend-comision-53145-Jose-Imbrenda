@@ -27,7 +27,8 @@ router.post('/bdFile', uploader.single('bdFile'), async (req,res)=>{
         delete row[Object.keys(row)[0]];
     });
 
-    await productModel.insertMany(data)
+    await productManager.addProducts(data)
+    //await productModel.insertMany(data)
 
     const {io} = req
     io.emit('massiveProductsUpload', await productManager.getProducts())

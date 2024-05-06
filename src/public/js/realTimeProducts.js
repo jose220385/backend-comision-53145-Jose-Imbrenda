@@ -9,9 +9,9 @@ const socketOn =(emitName)=>{
                 const divProducto = document.createElement('div')
                 divProducto.innerHTML = `
                                         <h3>${p.title}</h3>
-                                        <p>${p.code}</p>
+                                        <p><span>Cod:</span>${p.code}</p>
                                         <p>${p.description}</p>
-                                        <p>${p.price}</p>
+                                        <p><span>$</span>${p.price}</p>
                                         <div class="buttonContainer">
                                             <button id="borrar" onclick="borrar()">Borrar</button>
                                             <button id="actualizar" onclick="actualizar()">Actualizar</button>
@@ -39,11 +39,13 @@ formAddProduct.addEventListener("submit", (e)=> {
     const newProduct = {
         code: formAddProduct.elements["code"].value,
         category: formAddProduct.elements["category"].value,
+        subCategory: formAddProduct.elements["sub-category"].value,
         title: formAddProduct.elements["title"].value,
         description: formAddProduct.elements["description"].value,
-        price: formAddProduct.elements["price"].value,
+        cost: parseFloat(formAddProduct.elements["cost"].value),
+        markdown: parseFloat(formAddProduct.elements["markdown"].value),
         thumbnail: formAddProduct.elements["thumbnail"].value,
-        stock: formAddProduct.elements["stock"].value,
+        stock: parseInt(formAddProduct.elements["stock"].value),
         brand: formAddProduct.elements["brand"].value,
         provider: formAddProduct.elements["provider"].value
     }
@@ -104,8 +106,10 @@ const actualizar =()=>{
         <input type="text" name="title" placeholder="Nombre del producto">
         <input type="text" name="code" placeholder="Codigo del producto">
         <input type="text" name="category" placeholder="Categoría del producto">
+        <input type="text" name="sub-category" placeholder="Sub-categoría del producto">
         <input type="text" name="thumbnail" placeholder="Ruta de la foto">
-        <input type="number" name="price" placeholder="Precio del producto">
+        <input type="number" name="cost" placeholder="Costo del producto">
+        <input type="number" name="markdown" placeholder="Porcentaje de marcado del producto">
         <input type="number" name="stock" placeholder="Stock del producto">
         <textarea name="description" placeholder="Descripción del producto"></textarea>
         <button type="submit">Actualizar</button>
@@ -120,11 +124,15 @@ const actualizar =()=>{
     const updatedProduct = {
         code: updateForm.elements["code"].value,
         category: updateForm.elements["category"].value,
+        subCategory: upDateform.elements["sub-category"].value,
         title: updateForm.elements["title"].value,
         description: updateForm.elements["description"].value,
-        price: updateForm.elements["price"].value,
-        thumbnail: updateForm.elements["thumbnail"].value,
-        stock: updateForm.elements["stock"].value,
+        cost: upDateform.elements["cost"].value,
+        markdown: parseFloat(upDateform.elements["markdown"].value),
+        thumbnail: parseFloat(updateForm.elements["thumbnail"].value),
+        stock: parseInt(updateForm.elements["stock"].value),
+        brand: upDateform.elements["brand"].value,
+        provider: upDateform.elements["provider"].value
     }
 
     fetch(`/api/products/${idToUpDate}`, {
@@ -183,4 +191,67 @@ formularioCargaMasiva.addEventListener("submit", (e)=> {
         console.error("Error:", error);
     });
 
+})
+
+const formAddCategory = document.getElementById("formulario-categoria")
+
+formAddCategory.addEventListener("submit", (e)=> {
+    e.preventDefault()
+    const newCategory = {
+        categoryName: formAddCategory.elements["categoryName"].value,
+    }
+
+    fetch('/api/products/categories', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newCategory)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error al agregar Categoria");
+        }
+        return response.json()
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+    location. reload()
+})
+
+const formAddSubCategory = document.getElementById("formulario-subCategoria")
+
+formAddSubCategory.addEventListener("submit", (e)=> {
+    e.preventDefault()
+    const newSubCategory = {
+        categoryName: formAddSubCategory.elements["categoryName"].value,
+        subCategoryName: formAddSubCategory.elements["subCategoryName"].value
+    }
+
+    fetch('/api/products/subCategories', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newSubCategory)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error al agregar Categoria");
+        }
+        return response.json()
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+    location. reload()
 })

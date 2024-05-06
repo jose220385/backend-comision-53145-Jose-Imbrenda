@@ -13,6 +13,14 @@ const schema = new mongoose.Schema({
     required: true,
   },
   description: String,
+cost:{
+  type: Number,
+    required: true
+},
+markdown: {
+  type: Number,
+  required: true
+},
   price: {
     type: Number,
     required: true,
@@ -23,6 +31,10 @@ const schema = new mongoose.Schema({
     required: true,
   },
   category: {
+    type: String,
+    required: true,
+  },
+  subCategory: {
     type: String,
     required: true,
   },
