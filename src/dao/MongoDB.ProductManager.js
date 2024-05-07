@@ -5,6 +5,7 @@ import { __dirname } from '../utils/utils.js';
 import { readFile, writeFile } from "../utils/utils.js";
 import { categoryModel } from './models/category.model.js';
 import { productModel } from './models/product.model.js';
+import {brandModel} from './models/brand.model.js'
 //import { isExist } from "../utils.js";
 import {dirname} from "path"
 
@@ -91,11 +92,6 @@ export default class MDBProductManager {
 }
  
 
-getProductsCategories = async()=>{
-const categories = await productModel.find({},{category:1})
-return categories
-}
-
 deleteProduct = async(id) =>{
 try{
  /*  const products = await readFile(this.path)
@@ -139,7 +135,7 @@ addCategory = async(category) =>{
 addSubCategory = async(newSubCategory) =>{
   const subCategoryToAdd = await categoryModel.findOneAndUpdate(
     {categoryName:newSubCategory.categoryName},
-    { $addToSet: { subCategories: { _id: uuidv4(), subCategoryName: newSubCategory.subCategoryName} } },
+    { $addToSet: { subCategories: {_id:uuidv4(),subCategoryName: newSubCategory.subCategoryName} } },
     { new: true, upsert: true }
     )
   return ({status:"success", payload: subCategoryToAdd})
@@ -150,12 +146,30 @@ getCategories = async() =>{
   return categories
 }
 
-//Falta terminar:
 getSubCategories = async(category) =>{
-  const categories = await categoryModel.find().lean()
-  return categories
+  
+  try{
+    const categoryFound = await categoryModel.findOne({categoryName:category}).lean()
+    return categoryFound.subCategories
+  } catch (error){
+    console.log(err);
+  }
 }
 
+//CRUD Marcas
+
+addBrand= async(brand) =>{
+  console.log('log desde el manager') 
+  console.log( brand);
+
+  const newBrand = await brandModel.create({brandName:brand.brandName})
+  return ({status:"success", payload: newBrand})
+}
+
+getBrands = async() =>{
+  const brands = await brandModel.find().lean()
+  return brands
+}
 
 }
 

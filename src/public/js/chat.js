@@ -29,7 +29,6 @@
 
     socket.on('messageLogs', data => {
         console.log('Mensajes del server', data)
-        console.log(data);
         let log = document.getElementById('messageLog')
 
         let messages = ''

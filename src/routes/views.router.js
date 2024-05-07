@@ -17,15 +17,16 @@ router.get('/', async (req,res)=>{
 router.get('/realTimeProducts', async (req,res)=>{
     const products = await productManager.getProducts()
     //const categories = [{categoryName: "categoria1"},{categoryName: "categoria2"},{categoryName: "categoria3"}]
-    const subCategories = [{subCategoryName: "sub-categoria1"},{subCategoryName: "sub-categoria1"},{subCategoryName: "sub-categoria1"}]
-    const brands = [{brandName: "Marca1"},{brandName: "Marca2"},{brandName: "Marca3"}]
+    //const subCategories = [{subCategoryName: "sub-categoria1"},{subCategoryName: "sub-categoria1"},{subCategoryName: "sub-categoria1"}]
+    //const brands = [{brandName: "Marca1"},{brandName: "Marca2"},{brandName: "Marca3"}]
+    const brands = await productManager.getBrands()
     const categories = await productManager.getCategories()
     res.render('realTimeProducts', {
         title: 'Productos en tiempo real',
         products : products,
         styles: 'homeStyles.css',
         categories,
-        subCategories
+        brands
     })
 })
 

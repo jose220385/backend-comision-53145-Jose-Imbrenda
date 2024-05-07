@@ -31,6 +31,7 @@ socketOn('realTimeProducts-delete')
 socketOn('realTimeProducts-upload')
 socketOn('massiveProductsUpload')
 
+//Funcion para agregar productos
 
 const formAddProduct = document.getElementById("formulario-producto")
 
@@ -72,6 +73,8 @@ formAddProduct.addEventListener("submit", (e)=> {
 
 })
 
+//Funcion para borrar productos
+
 const borrar =()=>{
     const id = document.activeElement.parentNode.parentNode.id
     console.log(id);
@@ -92,6 +95,8 @@ const borrar =()=>{
     });
 
 }
+
+//Funcion para actualizar productos
 
 const actualizar =()=>{
     idToUpDate = document.activeElement.parentNode.parentNode.id
@@ -167,6 +172,8 @@ const actualizar =()=>{
 
 }
 
+//Carga masiva de productos mediante un excel
+
 const formularioCargaMasiva = document.getElementById("formulario-cargaMasiva")
 
 formularioCargaMasiva.addEventListener("submit", (e)=> {
@@ -192,6 +199,8 @@ formularioCargaMasiva.addEventListener("submit", (e)=> {
     });
 
 })
+
+//Agregar Categorias
 
 const formAddCategory = document.getElementById("formulario-categoria")
 
@@ -224,6 +233,8 @@ formAddCategory.addEventListener("submit", (e)=> {
     location. reload()
 })
 
+//Agegar sub-Categoria a las categorias
+
 const formAddSubCategory = document.getElementById("formulario-subCategoria")
 
 formAddSubCategory.addEventListener("submit", (e)=> {
@@ -254,4 +265,90 @@ formAddSubCategory.addEventListener("submit", (e)=> {
     });
 
     location. reload()
+})
+
+//Obtener sub-categorias de manera dinamica en los select segun la categoria que se elija
+
+const categoryInput = document.getElementById('categoryInput')
+categoryInput.addEventListener('change',(e) =>{
+    const categoryName = categoryInput.value
+    console.log(categoryName);
+    const subCategoriesInput = document.getElementById('subCategories')
+    subCategoriesInput.innerHTML = ""
+    fetch(`/api/products/subCategories/${categoryName}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error al agregar Categoria");
+        }
+        return response.json()
+    })
+    .then(data => {
+        data.forEach(d =>{
+            subCategoriesInput.innerHTML += `<option name=${d.subCategoryName} value='${d.subCategoryName}'>${d.subCategoryName}</option>`
+        })
+
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+})
+
+
+//Agregar Marca 
+
+const formAddBrand = document.getElementById("formulario-marca")
+
+formAddBrand.addEventListener("submit", (e)=> {
+    e.preventDefault()
+    const newBrand = {
+        brandName: formAddBrand.elements["brandName"].value,
+    }
+
+    fetch('/api/products/brands', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newBrand)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error al agregar Categoria");
+        }
+        return response.json()
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+    location. reload()
+})
+
+//Funcion replicada (falta modularizar y agrupar)
+
+const categoryInputForPrice = document.getElementById('categoryInputForPrice')
+categoryInputForPrice.addEventListener('change',(e) =>{
+    const categoryName = categoryInputForPrice.value
+    console.log(categoryName);
+    const subCategoriesInput = document.getElementById('subCategoriesForPrice')
+    subCategoriesInput.innerHTML = ""
+    fetch(`/api/products/subCategories/${categoryName}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error al agregar Categoria");
+        }
+        return response.json()
+    })
+    .then(data => {
+        data.forEach(d =>{
+            subCategoriesInput.innerHTML += `<option name=${d.subCategoryName} value='${d.subCategoryName}'>${d.subCategoryName}</option>`
+        })
+
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
 })

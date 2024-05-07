@@ -53,5 +53,19 @@ router.post('/subCategories', async (req,res)=>{
     res.send(await mdbProductManager.addSubCategory(req.body))
 })
 
+router.get('/subCategories/:catId', async (req,res)=>{
+    const {catId} = req.params
+    console.log("log del router"+catId);
+    res.send(await mdbProductManager.getSubCategories(catId))
+})
+
+//CRUD de marcas
+
+router.post('/brands', async (req,res)=>{
+    console.log('log del router')
+    console.log(req.body);
+    res.send(await mdbProductManager.addBrand(req.body))
+})
+
 
 export default router

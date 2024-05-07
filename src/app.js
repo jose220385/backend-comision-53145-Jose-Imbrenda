@@ -46,26 +46,10 @@ app.use('/api/upload', uploadRouter)
 
 app.use('/', viewRouter)
 
-/* async function saveMessage (data){
-    await messageModel.create(data)
-}
-
-async function showMessages (){
-    const messages = await messageModel.find().lean()
-    return messages
-} */
-
-
-
 io.on('connection', socket =>{
     console.log('nuevo cliente conectado')
     socket.on('message', async data => {
-       /*  newMessages.push(data)
-        console.log(newMessages)  */
         await messageModel.create(data)
-        /* console.log(data) 
-        saveMessage(data) */
-        // emitimos los mensajes
         socket.emit('messageLogs', await messageModel.find().lean())
     })
 })
