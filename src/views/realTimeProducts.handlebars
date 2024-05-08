@@ -15,8 +15,8 @@
             <p>{{this.description}}</p>
             <p><span>$</span>{{this.price}}</p>
             <div class="buttonContainer">
-                <button id="borrar" onclick="borrar()">Borrar</button>
-                <button id="actualizar" onclick="actualizar()">Actualizar</button>
+                <button id="borrar" onclick="deleteProduct()">Borrar</button>
+                <button id="actualizar" onclick="updateProduct()">Actualizar</button>
             </div>
         </div>
         {{/each}}
@@ -73,27 +73,23 @@
         <h4>Formulario para agregar productos:</h4>
         <input type="text" name="title" placeholder="Nombre del producto" required>
         <input type="text" name="code" placeholder="Codigo del producto" required>
-        {{!-- <input type="text" name="category" placeholder="Categoría del producto" required> --}}
-        <label for="category">Categoría:</label>
+        <label for="category">Categoría: <span><a href="#formulario-categoria">(Nueva Categoria)</a></span></label>
         <select name="category" id="categoryInput" required>
             <option>Seleccione Categoria</option>
             {{#each categories}}
                 <option value="{{this.categoryName}}">{{this.categoryName}}</option>
             {{/each}}
         </select>
-        <a href="#formulario-categoria">Nueva Categoria</a>
-        <label for="sub-category">Sub Categoría:</label>
+        <label for="sub-category">Sub Categoría: <span><a href="#formulario-subCategoria">(Nueva Sub-Categoria)</a></span></label>
         <select name="sub-category" id="subCategories" required> 
         </select>
-        <a href="#formulario-subCategoria">Nueva Sub-Categoria</a>
-        <label for="brand">Marca:</label>
+        <label for="brand">Marca: <span><a href="#formulario-marca">(Nueva Marca)</a></span></label>
         <select name="brand" id="brandInput" required>
             <option>Seleccione Marca</option>
             {{#each brands}}
                 <option value="{{this.brandName}}">{{this.brandName}}</option>
             {{/each}}
         </select>
-        <a href="#formulario-marca">Nueva Marca</a>
         <input type="text" name="provider" placeholder="Proveedor" required>
         <input type="text" name="thumbnail" placeholder="Ruta de la foto" required>
         <input type="number" name="cost" placeholder="Costo del producto" required>
@@ -141,4 +137,9 @@
 </main>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/realTimeProducts.js"></script>
+<script src="/js/realTimeProducts.Functions/socketFunction.js" ></script>
+<script src="/js/commonFunctions/fetch.js" ></script>
+<script src="/js/realTimeProducts.Functions/CRUD.categories.js" ></script>
+<script src="/js/realTimeProducts.Functions/CRUD.brands.js" ></script>
+<script src="/js/realTimeProducts.Functions/CRUD.products.js" ></script>
+<script src="/js/main.realTimeProducts.js"></script>

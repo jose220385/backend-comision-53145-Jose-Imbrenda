@@ -50,7 +50,7 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 250px; 
-    height: 430px; 
+    height: 470px; 
     background-color: #a8a8a8; 
     border: 2px solid black;
 }
@@ -58,5 +58,9 @@ h1 {
 #formulario-actualizacion > * {
     display: block;
     margin: 10px;
+}
+
+span a {
+    margin-left: 10px;
 }
 

@@ -49,6 +49,10 @@ router.post('/categories', async (req,res)=>{
     res.send(await mdbProductManager.addCategory(req.body))
 })
 
+router.get('/categories/all', async (req,res)=>{
+    res.send(await mdbProductManager.getCategories())
+})
+
 router.post('/subCategories', async (req,res)=>{
     res.send(await mdbProductManager.addSubCategory(req.body))
 })
@@ -62,9 +66,11 @@ router.get('/subCategories/:catId', async (req,res)=>{
 //CRUD de marcas
 
 router.post('/brands', async (req,res)=>{
-    console.log('log del router')
-    console.log(req.body);
     res.send(await mdbProductManager.addBrand(req.body))
+})
+
+router.get('/brands/all', async (req,res)=>{
+    res.send(await mdbProductManager.getBrands())
 })
 
 

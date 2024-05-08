@@ -114,7 +114,7 @@ updateProduct = async(id,productToUpdate) =>{
       description: productToUpdate.description === ""? productNotUpdated.description : productToUpdate.description,
       cost: productToUpdate.cost === ""? productNotUpdated.cost : productToUpdate.cost,
       markdown: productToUpdate.markdown === ""? productNotUpdated.markdown : productToUpdate.markdown,
-      price: this.calculatePrice(productToUpdate.cost,productToUpdate.markdown),
+      price: this.calculatePrice(productToUpdate.cost === ""? productNotUpdated.cost : productToUpdate.cost,productToUpdate.markdown === ""? productNotUpdated.markdown : productToUpdate.markdown,),
       thumbnail: productToUpdate.thumbnail === ""? productNotUpdated.thumbnail : productToUpdate.thumbnail,
       stock: productToUpdate.stock === ""? productNotUpdated.stock : productToUpdate.stock,
       category: productToUpdate.category === ""? productNotUpdated.category : productToUpdate.category,
