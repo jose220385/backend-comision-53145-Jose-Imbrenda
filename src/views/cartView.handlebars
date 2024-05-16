@@ -10,13 +10,20 @@
             </div>
             <p>Cod: {{this.productId.code}}</p>
             <p><strong> {{this.productId.title}}</strong></p>
-            <p>$ {{this.productId.price}}</p>
-            <input type="number" name="quantity" min="1" max="100" value={{this.quantity}}>
+            <h4>$ <span>{{this.productId.price}}</span></h4>
+            <input type="number" name="quantity" min="1" max="100" value={{this.quantity}} onchange="getTotal()">
             <div class="buttonContainer">
                 <button onclick="deleteProductFromCart()">Borrar Item</button>
             </div>
         </div>
         {{/each}}
+        </div>
+        <div class="totalContainer">
+            <h3>Total de la compra:  $<span id="total"></span></h3>
+        </div>
+        <div class="finishButtonsContainer">
+            <a href="/products">Agregar mas productos</a>
+            <button>Finalizar Compra</button>
         </div>
     </div>
 </main>
@@ -25,4 +32,5 @@
 <script src="/js/commonFunctions/fetch.js" ></script>
 <script src="/js/cartView.Functions/cartView.socket.js" ></script>
 <script src="/js/cartView.Functions/CRUD.productsFromCart.js" ></script>
+<script src="/js/cartView.Functions/getTotal.js" ></script>
 <script src="/js/main.cartView.js"></script>

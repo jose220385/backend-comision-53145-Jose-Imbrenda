@@ -11,12 +11,12 @@ socket.on(emitName, data =>{
             divProducto.innerHTML = `
                                     <div class="cartImageContainer">
                                         <p>img</p>
-                                        {{!-- <img src="${p.productId.thumbnail}" alt=""> --}}
+                                        <img src="" alt="">
                                     </div>
                                     <p>Cod: ${p.productId.code}</p>
                                     <p><strong> ${p.productId.title}</strong></p>
-                                    <p>$ ${p.productId.price}</p>
-                                    <input type="number" name="quantity" min="1" max="100" value=${p.quantity}>
+                                    <h4>$ <span>${p.productId.price}</span></h4>
+                                    <input type="number" name="quantity" min="1" max="100" value=${p.quantity} onchange="getTotal()>
                                     <div class="buttonContainer">
                                         <button onclick="deleteProduct()">Borrar Item</button>
                                     </div>
@@ -24,6 +24,7 @@ socket.on(emitName, data =>{
             divProducto.className='productContainer'
             divProducto.id= p.productId._id
             productsContainer.appendChild(divProducto)
+            getTotal()
             })
 
     }

@@ -39,3 +39,15 @@ h1{
     justify-content: center;
 }
 
+.finishButtonsContainer {
+    margin-left: 405px;
+}
+
+.finishButtonsContainer > *{
+    margin: 15px;
+}
+
+.totalContainer{
+    margin-top: 10px;
+    margin-left: 450px;
+}
