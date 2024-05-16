@@ -1,9 +1,25 @@
-import mongoose from "mongoose";
+import {Schema, model} from "mongoose";
 
 const collection = "carts";
 
-const schema = new mongoose.Schema({
-  products:[]
+const schema = new Schema({
+  products:{
+    type:[{
+      productId:{
+        type: Schema.Types.ObjectId,
+        ref:'products'
+      },
+      quantity: Number
+  }]
+}
 });
 
-export const cartModel = mongoose.model(collection, schema);
+schema.pre('findById', function(){
+  this.populate('products.productId')
+})
+
+schema.pre('find', function(){
+  this.populate('products.productId')
+})
+
+export const cartModel = model(collection, schema);

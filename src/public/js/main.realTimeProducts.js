@@ -11,7 +11,6 @@ addProduct("formulario-producto")
 
 //Funcion para borrar productos (se ejecuta en realTimeProducts.handlebars)
 
-
 //Funcion para actualizar productos (se ejecuta en realTimeProducts.handlebars)
 
 

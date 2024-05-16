@@ -14,6 +14,11 @@ router.get('/:cid', async (req,res)=>{
     res.send({status: 'success', payload: ProductsByCartId})
 })
 
+router.get('/carts/all', async (req,res)=>{
+    const carts = await cartManager.getCarts()
+    res.send({status: 'success', payload: carts})
+})
+
 router.post('/', async (req,res)=>{
     await cartManager.addCart()
     res.send({status: 'success', payload: 'Carrito creado satisfactoriamente'})
@@ -22,17 +27,18 @@ router.post('/', async (req,res)=>{
 router.post('/:cid/products/:pid', async (req,res)=>{
     const {cid} = req.params
     const {pid} = req.params
-    /* const existCart = await isExist(cid,`${__dirname}/carts.json`)
-    const existProduct = await isExist(pid,`${__dirname}/products.json`)
-    if(!existProduct){
-        return res.status(404).send({status: 'error', error:`No existe el producto solicitado`})
-        }
-    if(!existCart){
-        return res.status(404).send({status: 'error', error:`No existe el carrito solicitado`})
-        } */
     const{quantity}=req.body
     res.send(await cartManager.addProductToCart(cid,quantity,pid))
-    //res.send({status: 'success', payload: 'Productos agregados satisfactoriamente'})
 })
+
+router.delete('/:cid/products/:pid', async (req,res)=>{
+    const {cid} = req.params
+    const {pid} = req.params
+    res.send(await cartManager.deleteProductFromCart(cid,pid))
+    const {io} = req
+    io.emit('cartView-deleteProduct', await cartManager.getProductsByCartId(cid))
+})
+
+
 
 export default router

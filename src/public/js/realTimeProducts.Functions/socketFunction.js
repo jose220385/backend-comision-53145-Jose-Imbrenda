@@ -1,5 +1,6 @@
 const socketOn =(emitName)=>{
     socket.on(emitName, data =>{
+        console.log("cliente escuchando");
         if(data){
             const productsContainer = document.getElementById('productsContainer')
             productsContainer.innerHTML=''

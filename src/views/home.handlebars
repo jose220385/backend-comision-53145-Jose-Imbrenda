@@ -1,8 +1,18 @@
 <div>
     <h1>{{title}}</h1>
     <h2>Los productos en existencia son:</h2>
-    <div id="productsContainer">
+    
     {{#if products}}
+    <div class="pageCommander">
+        {{#if hasPrevPage}}
+            <a href="/products?newPage={{prevPage}}">Anterior</a>
+        {{/if}}
+        <span>{{page}}</span>
+        {{#if hasNextPage}}
+            <a href="/products?newPage={{nextPage}}">Siguiente</a>
+        {{/if}}
+    </div>
+    <div id="productsContainer">
         {{#each products}}
         <div class="productContainer" id={{this._id}}>
             <h3>{{this.title}}</h3>
@@ -10,7 +20,7 @@
             <p>{{this.description}}</p>
             <p>{{this.price}}</p>
             <div class="buttonContainer">
-                <button id="addToCart">Agregar al Carrito</button>
+               <a href="/products/{{this._id}}">Mas info</a>
             </div>
         </div>
         {{/each}}

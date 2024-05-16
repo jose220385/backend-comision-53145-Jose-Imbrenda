@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"
 
 const collection = "products";
 
@@ -44,5 +45,7 @@ markdown: {
   provider: String,
   status: Boolean,
 });
+
+schema.plugin(mongoosePaginate)
 
 export const productModel = mongoose.model(collection, schema);

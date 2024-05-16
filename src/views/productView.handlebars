@@ -1,0 +1,28 @@
+<main>
+<div class="productContainer" id={{_id}}>
+    <div class="photoContainer">
+        <p>img</p>
+        {{!-- <img src={{this.thumbnail}} alt=""> --}}
+    </div>
+    <div class="infoContainer">
+        <div class="productInfo">
+            <h1>{{this.title}}</h1>
+            <h3>{{this.brand}}</h3>
+            <h4>Categoría: {{this.category}}</h4>
+            <h4>Sub-Categoría: {{this.subCategory}}</h4>
+            <p>{{this.description}}</p>
+            <h4>Precio: ${{this.price}}</h4>
+        </div>
+        <form class="buttonContainer" id="addToCart">
+            <div>
+            <label for="quantity">Cantidad:</label>
+            <input type="number" name="quantity" min="1" max="100" value="1">
+            </div>
+            <button type="submit"> Agregar al carrito</button>
+        </form>
+        <a class="link" href="/products">Volver a todos los prouctos</a>
+    </div>
+</div>
+</main>
+<script src="/js/commonFunctions/fetch.js" ></script>
+<script src="/js/productView.js"></script>

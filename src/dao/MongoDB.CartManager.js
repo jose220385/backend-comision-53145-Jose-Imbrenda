@@ -23,49 +23,62 @@ export default class MDBCartManager {
 
         getProductsByCartId = async(id) =>{
             try{
-            const cartFound = await cartModel.findById(id).lean()
-            return cartFound.products
+            const cartFound = await cartModel.findById(id).populate('products.productId').lean().exec()
+            //const cartFound = await cartModel.find({_id:id}).lean() ==> No funciona el middleware
+            return cartFound
           } catch (error) {
             console.log(error);
           }
         }
 
-      
+      getCarts = async ()=>{
+        const carts = await cartModel.find().lean()
+        return carts
+      }
 
       addProductToCart = async (cid,quantity,pid) =>{
         try{
-            const query = cartModel.where({ _id: cid, 'products.id':pid })
+            const query = cartModel.where({ _id: cid, 'products.productId':pid })
             const productExist = await query.findOne()
 
             if(!productExist){
                 const cart = await cartModel.findOneAndUpdate(
                 { _id: cid},
-                { $addToSet: { products: { id: pid, quantity} } },
+                { $addToSet: { products: { productId: pid, quantity} } },
                 { new: true })
                 return ({status: "success", payload: cart})
             }
             
             const addProduct = await cartModel.findOneAndUpdate(
-              { _id: cid, 'products.id':pid },
+              { _id: cid, 'products.productId':pid },
               { $inc: { 'products.$.quantity': quantity }}, 
               { new: true,upsert: true })
               return ({status: "success", payload: addProduct})
-              
-            /* const cart = await cartModel.findById(cid).then(async cart =>{
-              const existProduct = cart.products.find(item => item.id === pid)
-              console.log(existProduct);
-              existProduct? existProduct.quantity += quantity : cart.products.push({_id:pid,quantity})
-              console.log(existProduct);
-              console.log(await cart.save())
-              return ({status: "success", payload: cart})
-            }) */
             
             
           } catch (error) {
             console.log(error);
           }
         }
+
+      deleteProductFromCart = async(cid,pid) =>{
+          try {
+            await cartModel.findByIdAndUpdate(
+                cid,
+                { $pull: { products: { productId: pid } } },
+                { new: true }
+            )
+          return ({status: "success", payload: "Producto eliminado del carrito"})
         }
+          catch (error) {
+          console.log(error);
+        }
+      }
+
+
+
+
+      }
 
         // pruebas
 

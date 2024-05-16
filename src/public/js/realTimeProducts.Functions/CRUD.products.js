@@ -132,9 +132,6 @@ const updateProduct =async ()=>{
         provider: updateForm.elements["provider"].value
     }
 
-    console.log(typeof updatedProduct.cost)
-    console.log(typeof updatedProduct.markdown)
-
     const route=`/api/products/${idToUpDate}`
     const headers={
         method: "PUT",

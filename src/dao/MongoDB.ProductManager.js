@@ -77,14 +77,16 @@ export default class MDBProductManager {
     }
   }
 
-  getProducts = async() => {
-    const products = await productModel.find().lean()
+  getProducts = async({limit = 10, newPage = 1}) => {
+    //const products = await productModel.find().lean()
+    const products = await productModel.paginate({},{limit,page: newPage,lean:true})
     return products;
   }
 
  getProductById = async(id) =>{
     try{
     const productFound = await productModel.findById(id).lean()
+    console.log(productFound);
     return productFound;
   } catch (error) {
     console.log(error);

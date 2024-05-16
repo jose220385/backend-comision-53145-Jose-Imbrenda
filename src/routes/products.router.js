@@ -7,11 +7,12 @@ const mdbProductManager = new MDBProductManager();
 
 router.get('/', async (req,res)=>{
     let {limit} = req.query
-    const products = await mdbProductManager.getProducts()
+    /* const products = await mdbProductManager.getProducts()
     if(limit){
         const limitedProducts = products.slice(0,limit)
         return res.send({status: 'success', payload: limitedProducts})
-    }
+    } */
+    const{docs, page,hasPrevPage, hasNextPage,prevPage,nextPage} = await mdbProductManager.getProducts()
     res.send({status: 'success', payload: products})
 })
 router.get('/:pid', async (req,res)=>{
