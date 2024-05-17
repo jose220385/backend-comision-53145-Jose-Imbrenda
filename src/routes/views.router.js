@@ -9,9 +9,19 @@ const cartManager = new MDBCartManager()
 
 router.get('/products', async (req,res)=>{
     //const products = await productManager.getProducts()
+
     const {newPage, limit} = req.query
-    const{docs, page,hasPrevPage, hasNextPage,prevPage,nextPage} = await productManager.getProducts({limit, newPage})
-    res.render('home', {
+    const {category, subCategory, brand, order, status} = req.query
+    const filter = {category, subCategory, brand, order, status}
+    
+    console.log(filter)
+
+    const{docs, page,hasPrevPage, hasNextPage,prevPage,nextPage} = await productManager.getProducts({limit, newPage},filter)
+    const brands = await productManager.getBrands()
+    const categories = await productManager.getCategories()
+    const {io} = req
+    io.emit('products-filtered', {docs,page,hasPrevPage, hasNextPage,prevPage,nextPage, brands, categories})
+    res.render('products', {
         title: 'Productos',
         styles: 'homeStyles.css',
         products: docs,
@@ -19,17 +29,21 @@ router.get('/products', async (req,res)=>{
         hasPrevPage, 
         hasNextPage,
         prevPage,
-        nextPage
+        nextPage,
+        brands,
+        categories
     })
 })
 
 router.get('/realTimeProducts', async (req,res)=>{
-    const products = await productManager.getProducts()
+    const {newPage, limit} = req.query
+    
+    const {docs, page,hasPrevPage, hasNextPage,prevPage,nextPage} = await productManager.getProducts({limit, newPage})
     const brands = await productManager.getBrands()
     const categories = await productManager.getCategories()
     res.render('realTimeProducts', {
         title: 'Productos en tiempo real',
-        products : products,
+        products : docs,
         styles: 'homeStyles.css',
         categories,
         brands

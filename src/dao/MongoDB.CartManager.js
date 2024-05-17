@@ -75,6 +75,15 @@ export default class MDBCartManager {
         }
       }
 
+      deleteProducts = async(cid) =>{
+          await cartModel.findByIdAndUpdate(
+            cid,
+            {$set:{products:[]}},
+            { new: true }
+          )
+          return({status: "success", payload: "Carrito vaciado exitosamente"})
+      }
+
 
 
 

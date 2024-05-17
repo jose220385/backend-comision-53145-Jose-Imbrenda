@@ -69,7 +69,9 @@ const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId) =>{
     const categoryInput = document.getElementById(nodeCategoriesId)
     categoryInput.addEventListener('change',(e) =>{
     const categoryName = categoryInput.value
-    console.log(categoryName);
+
+    if(categoryName){
+    console.log(categoryName)
     const subCategoriesInput = document.getElementById(nodeSubCategoriesId)
     subCategoriesInput.innerHTML = ""
 
@@ -89,6 +91,7 @@ const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId) =>{
     .catch(error => {
         console.error("Error:", error);
     });
+}
 })
 
 }

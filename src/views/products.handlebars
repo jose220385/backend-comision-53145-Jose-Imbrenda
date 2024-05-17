@@ -1,0 +1,68 @@
+<div>
+    <h1>{{title}}</h1>
+    <h2>Los productos en existencia son:</h2>
+    <form id="filter-form" class="filter">
+        <h4>Filtrar por:</h4>
+        <label for="category">Categoría: </label>
+        <select name="category" id="categoryInput" class="filterInput">
+            <option value="">Todas las Categorías</option>
+            {{#each categories}}
+                <option value="{{this.categoryName}}">{{this.categoryName}}</option>
+            {{/each}}
+        </select>
+        <label for="sub-category">Sub Categoría:</label>
+        <select name="sub-category" id="subCategories" class="filterInput">
+            <option value="">Todas las Sub-categorías</option> 
+        </select>
+        <label for="brand">Marca:</label>
+        <select name="brand" id="brandInput" class="filterInput">
+            <option value="">Todas las marcas</option>
+            {{#each brands}}
+                <option value="{{this.brandName}}">{{this.brandName}}</option>
+            {{/each}}
+        </select>
+        <label for="order">Orden:</label>
+        <select name="order" id="orderInput" class="filterInput">
+                <option value="">Seleccione orden</option>
+                <option value="high">Precio Mayor Primero</option>
+                <option value="low">Precio Menor Primero</option>
+        </select>
+        <label for="availability">Disponibilidad:</label>
+        <select name="availability" id="availabilityInput" class="filterInput">
+            <option value="">Todos los productos</option>
+                <option value="stock">En Stock</option>
+                <option value="withoutStock">Sin Stock</option>
+        </select>
+        <button type="submit">Aplicar Filtro</button>
+    </form>
+    {{#if products}}
+    <div class="pageCommander">
+        {{#if hasPrevPage}}
+            <a href="/products?newPage={{prevPage}}">Anterior</a>
+        {{/if}}
+        <span>{{page}}</span>
+        {{#if hasNextPage}}
+            <a href="/products?newPage={{nextPage}}">Siguiente</a>
+        {{/if}}
+    </div>
+    <div id="productsContainer">
+        {{#each products}}
+        <div class="productContainer" id={{this._id}}>
+            <h3>{{this.title}}</h3>
+            <p>{{this.code}}</p>
+            <p>{{this.description}}</p>
+            <p>{{this.price}}</p>
+            <div class="buttonContainer">
+               <a href="/products/{{this._id}}">Mas info</a>
+            </div>
+        </div>
+        {{/each}}
+    {{else}}
+        <h2>No hay productos</h2>
+    {{/if}}
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/commonFunctions/fetch.js" ></script>
+<script src="/js/products.Functions/products.Functions.js" ></script>
+<script src="/js/main.products.js"></script>

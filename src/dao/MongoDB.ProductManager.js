@@ -77,9 +77,18 @@ export default class MDBProductManager {
     }
   }
 
-  getProducts = async({limit = 10, newPage = 1}) => {
+  getProducts = async({limit = 10, newPage = 1},filter) => {
     //const products = await productModel.find().lean()
-    const products = await productModel.paginate({},{limit,page: newPage,lean:true})
+    const {category, subCategory, brand, order, status} = filter
+    const query = {}
+    if(category){query.category = category}
+    if(subCategory){query.subCategory = subCategory}
+    if(brand){query.brand = brand}
+    if(status === "withoutStock"){query.status = false} else {query.status = true}
+
+    console.log(query);
+    //if(order){filter.order = order}
+    const products = await productModel.paginate(query,{limit,page: newPage,lean:true})
     return products;
   }
 
@@ -154,7 +163,7 @@ getSubCategories = async(category) =>{
     const categoryFound = await categoryModel.findOne({categoryName:category}).lean()
     return categoryFound.subCategories
   } catch (error){
-    console.log(err);
+    console.log(error);
   }
 }
 
