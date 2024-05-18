@@ -1,8 +1,8 @@
-//Funcion para obtener las categorias segun subcategorias
-const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId) =>{
+//Funcion para obtener las subcategorias segun categoria
+const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId,event) =>{
 
     const categoryInput = document.getElementById(nodeCategoriesId)
-    categoryInput.addEventListener('change',(e) =>{
+    categoryInput.addEventListener(event,(e) =>{
     const categoryName = categoryInput.value
 
     const subCategoriesInput = document.getElementById(nodeSubCategoriesId)
@@ -53,10 +53,12 @@ const productsFilter = () =>{
     const endpoint = '/products'
     const urlConParametros = `${endpoint}?${params}`
 
-    fetch(urlConParametros)
-    /* .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error)); */
+    window.location.href = urlConParametros
+
+    /* fetch(urlConParametros)
+    .then(response => response.json())
+    .then(data => window.location)
+    .catch(error => console.error('Error:', error)) */
 
    /*  const category = document.getElementById("categoryInput").value
     if(category){filter.category = category}
@@ -71,5 +73,29 @@ const productsFilter = () =>{
  */
     //console.log(filter);
 
+}
 
+//Funcion para traer query
+const getQueryValue = (query) =>{
+        const queryString = window.location.search
+        const params = new URLSearchParams(queryString)
+        const queryValue = params.get('category')
+        return queryValue
+}
+
+
+//Funcion para cargar el contenido que viene por query
+const contentLoadWithFilter = async (nodeId, query)=>{
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const queryValue = getQueryValue(query)
+        if(queryValue !== ""){
+            const queryInput = document.getElementById(nodeId)
+            queryInput.value = queryValue;
+        }
+
+        
+        
+        // Seleccionar el option correspondiente
+        
+    })
 }

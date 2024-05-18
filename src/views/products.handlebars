@@ -5,10 +5,10 @@
         <h4>Filtrar por:</h4>
         <label for="category">Categoría: </label>
         <select name="category" id="categoryInput" class="filterInput">
-            <option value="">Todas las Categorías</option>
-            {{#each categories}}
-                <option value="{{this.categoryName}}">{{this.categoryName}}</option>
-            {{/each}}
+                <option value="">Todas las Categorías</option>
+                    {{#each categories}}
+                        <option value="{{this.categoryName}}">{{this.categoryName}}</option>
+                    {{/each}}
         </select>
         <label for="sub-category">Sub Categoría:</label>
         <select name="sub-category" id="subCategories" class="filterInput">

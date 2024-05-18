@@ -20,7 +20,7 @@ router.get('/products', async (req,res)=>{
     const brands = await productManager.getBrands()
     const categories = await productManager.getCategories()
     const {io} = req
-    io.emit('products-filtered', {docs,page,hasPrevPage, hasNextPage,prevPage,nextPage, brands, categories})
+    //io.emit('products-filtered', {docs,page,hasPrevPage, hasNextPage,prevPage,nextPage, brands, categories})
     res.render('products', {
         title: 'Productos',
         styles: 'homeStyles.css',
@@ -31,7 +31,12 @@ router.get('/products', async (req,res)=>{
         prevPage,
         nextPage,
         brands,
-        categories
+        categories,
+        category,
+        subCategory,
+        brand,
+        order,
+        status
     })
 })
 
