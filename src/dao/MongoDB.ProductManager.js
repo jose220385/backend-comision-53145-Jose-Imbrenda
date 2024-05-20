@@ -78,7 +78,6 @@ export default class MDBProductManager {
   }
 
   getProducts = async({limit = 10, newPage = 1},filter) => {
-    //const products = await productModel.find().lean()
     const {category, subCategory, brand, order, status} = filter
     const query = {}
     if(category){query.category = category}
@@ -86,9 +85,9 @@ export default class MDBProductManager {
     if(brand){query.brand = brand}
     if(status === "withoutStock"){query.status = false} else {query.status = true}
 
-    console.log(query);
-    //if(order){filter.order = order}
-    const products = await productModel.paginate(query,{limit,page: newPage,lean:true})
+    const sortOption = order === "high"? -1:1
+
+    const products = await productModel.paginate(query,{limit,page: newPage,lean:true, sort:{price:sortOption}})
     return products;
   }
 
@@ -105,11 +104,6 @@ export default class MDBProductManager {
 
 deleteProduct = async(id) =>{
 try{
- /*  const products = await readFile(this.path)
-  const indexToDelete = products.findIndex(p => p.id === id)
-  if(indexToDelete < 0) return ({status:"failed", payload:"No se ha encontrado el producto que desea borrar"})
-  products.splice(indexToDelete,1)
-  await writeFile(products,this.path) */
   await productModel.findByIdAndDelete(id)
   return({status:"success", payload: 'Producto Borrado Exitosamente'})
 } catch (error) {

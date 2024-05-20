@@ -13,14 +13,12 @@ router.get('/products', async (req,res)=>{
     const {newPage, limit} = req.query
     const {category, subCategory, brand, order, status} = req.query
     const filter = {category, subCategory, brand, order, status}
-    
-    console.log(filter)
 
     const{docs, page,hasPrevPage, hasNextPage,prevPage,nextPage} = await productManager.getProducts({limit, newPage},filter)
     const brands = await productManager.getBrands()
     const categories = await productManager.getCategories()
     const {io} = req
-    //io.emit('products-filtered', {docs,page,hasPrevPage, hasNextPage,prevPage,nextPage, brands, categories})
+    
     res.render('products', {
         title: 'Productos',
         styles: 'homeStyles.css',

@@ -1,8 +1,26 @@
+//Funcion para traer query
+const getQueryValue = (query) =>{
+    const queryString = window.location.search
+    const params = new URLSearchParams(queryString)
+    const queryValue = params.get(query)
+    return queryValue
+}
+
+const setImputValue =(nodeId,query)=>{
+const queryValue = getQueryValue(query)
+    const queryInput = document.getElementById(nodeId)
+    if(queryValue){
+        queryInput.value = queryValue;
+    } else {
+        queryInput.selectedIndex = 0
+    }
+}
+
 //Funcion para obtener las subcategorias segun categoria
 const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId,event) =>{
 
     const categoryInput = document.getElementById(nodeCategoriesId)
-    categoryInput.addEventListener(event,(e) =>{
+   
     const categoryName = categoryInput.value
 
     const subCategoriesInput = document.getElementById(nodeSubCategoriesId)
@@ -21,7 +39,7 @@ const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId,event) =>{
         data.forEach(d =>{
             subCategoriesInput.innerHTML += `<option name=${d.subCategoryName} value='${d.subCategoryName}'>${d.subCategoryName}</option>`
         })
-
+        setImputValue('subCategories','subCategory')
     })
     .catch(error => {
         console.error("Error:", error);
@@ -30,7 +48,7 @@ const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId,event) =>{
     }
 
     subCategoriesInput.innerHTML = `<option name="all" value=''>Todas las Sub-Categorias</option>`
-})
+
 
 }
 
@@ -55,47 +73,84 @@ const productsFilter = () =>{
 
     window.location.href = urlConParametros
 
-    /* fetch(urlConParametros)
-    .then(response => response.json())
-    .then(data => window.location)
-    .catch(error => console.error('Error:', error)) */
-
-   /*  const category = document.getElementById("categoryInput").value
-    if(category){filter.category = category}
-    const subCategory = document.getElementById("subCategories").value
-    if(subCategory){filter.subCategory = subCategory}
-    const brand = document.getElementById("brandInput").value
-    if(brand){filter.brand = brand}
-    const order = document.getElementById("orderInput").value
-    if(order){filter.order = order}
-    const availability = document.getElementById("availabilityInput").value
-    if(availability){filter.availability = availability}
- */
-    //console.log(filter);
-
 }
-
-//Funcion para traer query
-const getQueryValue = (query) =>{
-        const queryString = window.location.search
-        const params = new URLSearchParams(queryString)
-        const queryValue = params.get('category')
-        return queryValue
-}
-
 
 //Funcion para cargar el contenido que viene por query
 const contentLoadWithFilter = async (nodeId, query)=>{
     document.addEventListener('DOMContentLoaded', (event) => {
-        const queryValue = getQueryValue(query)
-        if(queryValue !== ""){
-            const queryInput = document.getElementById(nodeId)
+        setImputValue(nodeId,query)
+        /* const queryValue = getQueryValue(query)
+        const queryInput = document.getElementById(nodeId)
+        if(queryValue){
             queryInput.value = queryValue;
+        } else {
+            queryInput.selectedIndex = 0
+        } */
+        if(query==='category'){
+            getSubCategories('categoryInput', 'subCategories')
+            //setImputValue('subCategories','subCategory')
         }
-
-        
-        
-        // Seleccionar el option correspondiente
-        
     })
 }
+
+//Funcion para cambiar de pagina
+
+const changePage = (nodeId)=>{
+    const changePage = document.getElementById(nodeId)
+    if(changePage){
+        changePage.addEventListener('click', (e)=>{
+        const url = new URL(window.location.href)
+        console.log(changePage);
+        const pageQuery = changePage.dataset.changepage
+        console.log(pageQuery)
+        url.searchParams.set('newPage', pageQuery)
+        console.log(url);
+        window.location.assign(url)
+        })
+    }
+}
+
+
+
+//Funcion para cargar los elementos en la pagina
+
+/* const loadInputsContent = async (inputId,query,route) =>{
+    const input = document.getElementById(inputId)
+    document.addEventListener('DOMContentLoaded', (event) => {
+        input.innerHTML=""
+        if(query === "category"){input.innerHTML=`<option value="">Todas las Categorías</option>`}
+        if(query === "subCategory"){input.innerHTML=`<option value="">Todas las Sub-Categorías</option>`}
+        if(query === "brand"){input.innerHTML=`<option value="">Todas las Marcas</option>`}
+        fetch(route)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error al cargar Categorias");
+            }
+            return response.json()
+        })
+        .then(data => {
+            data.forEach(d =>{
+                const propertyName = query + 'Name'
+                console.log(propertyName);
+                const objectProperty = d[propertyName]
+                console.log(objectProperty);
+                input.innerHTML += `<option name=${objectProperty} value='${objectProperty}'>${objectProperty}</option>`
+                
+                const queryValue = getQueryValue(query)
+                if(queryValue){
+                input.value = queryValue;
+                } else {
+                    input.selectedIndex = 0
+                }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+        
+    
+    })})
+} */
+        
+        
+// Seleccionar el option correspondiente
+        
