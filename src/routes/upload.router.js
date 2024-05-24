@@ -30,7 +30,7 @@ router.post('/bdFile', uploader.single('bdFile'), async (req,res)=>{
     await productManager.addProducts(data)
 
     const {io} = req
-    io.emit('massiveProductsUpload', await productManager.getProducts())
+    io.emit('massiveProductsUpload', await productManager.getProducts({},req.filter))
 
     await res.send({status: "success", payload: 'Archivo agregado exitosamente'})
 })

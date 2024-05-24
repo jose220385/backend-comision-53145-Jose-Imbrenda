@@ -17,7 +17,7 @@ const queryValue = getQueryValue(query)
 }
 
 //Funcion para obtener las subcategorias segun categoria
-const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId,event) =>{
+const getSubCategoriesInFilter = async (nodeCategoriesId, nodeSubCategoriesId,event) =>{
 
     const categoryInput = document.getElementById(nodeCategoriesId)
    
@@ -54,7 +54,7 @@ const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId,event) =>{
 
 //Funcion para filtrar
 
-const productsFilter = () =>{
+const productsFilter = (endpoint) =>{
     
     const filter ={
      category : document.getElementById("categoryInput").value,
@@ -68,7 +68,6 @@ const productsFilter = () =>{
 
     const params = new URLSearchParams(filter).toString()
 
-    const endpoint = '/products'
     const urlConParametros = `${endpoint}?${params}`
 
     window.location.href = urlConParametros
@@ -87,7 +86,7 @@ const contentLoadWithFilter = async (nodeId, query)=>{
             queryInput.selectedIndex = 0
         } */
         if(query==='category'){
-            getSubCategories('categoryInput', 'subCategories')
+            getSubCategoriesInFilter('categoryInput', 'subCategories')
             //setImputValue('subCategories','subCategory')
         }
     })

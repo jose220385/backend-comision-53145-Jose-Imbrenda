@@ -13,7 +13,6 @@ addProduct("formulario-producto")
 
 //Funcion para actualizar productos (se ejecuta en realTimeProducts.handlebars)
 
-
 //Carga masiva de productos mediante un excel
 
 massiveCharge("formulario-cargaMasiva")
@@ -33,9 +32,42 @@ addSubCategory("formulario-subCategoria")
 getSubCategories('categoryInputForPrice', 'subCategoriesForPrice')
 
 //Obtener sub-categorias de manera dinamica en el form de carga de productos: 
-getSubCategories('categoryInput', 'subCategories')
+getSubCategories('categoryInputForAdd', 'subCategoriesInAdd')
 
 
 //Agregar Marca 
 
 addBrand("formulario-marca")
+
+//Funcion para checkear y descheckear radio
+const raiseRadio = document.getElementById('raise');
+const decreaseRadio = document.getElementById('decrease');
+
+raiseRadio.addEventListener('click', function() {
+  if (this.checked) {
+    decreaseRadio.checked = false; 
+  }
+});
+
+decreaseRadio.addEventListener('click', function() {
+  if (this.checked) {
+    raiseRadio.checked = false; 
+  }
+});
+
+//Manejo de Filtros y Paginacion
+
+//Mantener seleccionados los select al momento de filtrar
+
+contentLoadWithFilter('categoryInput','category')
+contentLoadWithFilter('brandInput','brand')
+contentLoadWithFilter('orderInput','order')
+contentLoadWithFilter('availabilityInput','status')
+
+//Monitorea cambio en inputs y lanza funcion para filtrar productos
+const filterInputs = document.querySelectorAll(".filterInput")
+filterInputs.forEach(input => input.addEventListener('change', (e) => productsFilter('/realTimeProducts')))
+
+//Monitorea cambios en paginacion y envia parametros para cambio de pagina
+changePage('prevPage')
+changePage('nextPage')

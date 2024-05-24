@@ -44,6 +44,16 @@ router.delete('/:pid', async(req,res)=>{
     io.emit('realTimeProducts-delete', await mdbProductManager.getProducts())
 })
 
+router.put('/changePrice', async (req,res)=>{
+    const {changeCondition, category, subCategory, brand, percentaje} = req.query
+    const filter = {category, subCategory, brand, changeCondition, percentaje}
+    
+    res.send(await mdbProductManager.changePrice(filter))
+
+    /* const {io} = req
+    io.emit('realTimeProducts-upload', await mdbProductManager.getProducts()) */
+})
+
 //CRUD Categorias:
 
 router.post('/categories', async (req,res)=>{

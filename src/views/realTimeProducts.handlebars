@@ -3,27 +3,70 @@
 <div>
     <h1>{{title}}</h1>
     <h2>Los productos en existencia son:</h2>
-    
-    <div id="productsContainer">
-    
     {{#if products}}
-        
-        {{#each products}}
-        <div class="productContainer" id={{this._id}}>
-            <h3>{{this.title}}</h3>
-            <p><span>Cod:</span>{{this.code}}</p>
-            <p>{{this.description}}</p>
-            <p><span>$</span>{{this.price}}</p>
-            <div class="buttonContainer">
-                <button id="borrar" onclick="deleteProduct()">Borrar</button>
-                <button id="actualizar" onclick="updateProduct()">Actualizar</button>
+    <div class="mainContainer">
+        <form id="filter-form" class="filter">
+            <h4>Filtrar por:</h4>
+            <label for="category">Categoría: </label>
+            <select name="category" id="categoryInput" class="filterInput">
+                    <option value="">Todas las Categorías</option>
+                        {{#each categories}}
+                            <option value="{{this.categoryName}}">{{this.categoryName}}</option>
+                        {{/each}}
+            </select>
+            <label for="sub-category">Sub Categoría:</label>
+            <select name="sub-category" id="subCategories" class="filterInput">
+                <option value="">Todas las Sub-categorías</option> 
+            </select>
+            <label for="brand">Marca:</label>
+            <select name="brand" id="brandInput" class="filterInput">
+                <option value="">Todas las marcas</option>
+                {{#each brands}}
+                    <option value="{{this.brandName}}">{{this.brandName}}</option>
+                {{/each}}
+            </select>
+            <label for="order">Orden:</label>
+            <select name="order" id="orderInput" class="filterInput">
+                    <option value="">Seleccione orden</option>
+                    <option value="high">Precio Mayor Primero</option>
+                    <option value="low">Precio Menor Primero</option>
+            </select>
+            <label for="availability">Disponibilidad:</label>
+            <select name="availability" id="availabilityInput" class="filterInput">
+                <option value="">Todos los productos</option>
+                    <option value="stock">En Stock</option>
+                    <option value="withoutStock">Sin Stock</option>
+            </select>
+            {{!-- <button type="submit">Aplicar Filtro</button> --}}
+        </form>
+        <div class="pageAndProductsContainer">
+            <div class="pageCommander">
+            {{#if hasPrevPage}}
+                <button id="prevPage" data-changePage={{prevPage}} >Anterior</button>
+            {{/if}}
+            <span>{{page}}</span>
+            {{#if hasNextPage}}
+                <button id="nextPage" data-changePage={{nextPage}} >Siguiente</button>
+            {{/if}}
             </div>
+            <div id="productsContainer">
+                {{#each products}}
+                <div class="productContainer" id={{this._id}}>
+                    <h3>{{this.title}}</h3>
+                    <p>{{this.code}}</p>
+                    <p>{{this.description}}</p>
+                    <p>{{this.price}}</p>
+                    <div class="buttonContainer">
+                        <button id="borrar" onclick="deleteProduct()">Borrar</button>
+                        <button id="actualizar" onclick="updateProduct()">Actualizar</button>
+                    </div>
+                </div>
+                {{/each}}
+                </div>
+            {{else}}
+            <h2>No hay productos</h2>
+        {{/if}}
         </div>
-        {{/each}}
-    {{else}}
-        <h2>No hay productos</h2>
-    {{/if}}
-    
     </div>
 </div>
 <div>
@@ -36,8 +79,8 @@
     <form id="formulario-actualizacionPrecios" class="formularios">
         <h4>Actualizacion de precios (falta la logica)</h4>
         <div>
-            <input type="radio" name="raise" value="raise" checked> <span>Aumento</span>
-            <input type="radio" name="decrease" value="decrease"> <span>Descuento</span>
+            <input type="radio" name="changeCondition" value="raise" checked id="raise"> <span>Aumento</span>
+            <input type="radio" name="changeCondition" value="decrease" id="decrease"> <span>Descuento</span>
         </div>
         <div>
         <label for="category">Categoría:</label>
@@ -74,14 +117,14 @@
         <input type="text" name="title" placeholder="Nombre del producto" required>
         <input type="text" name="code" placeholder="Codigo del producto" required>
         <label for="category">Categoría: <span><a href="#formulario-categoria">(Nueva Categoria)</a></span></label>
-        <select name="category" id="categoryInput" required>
+        <select name="category" id="categoryInputForAdd" required>
             <option>Seleccione Categoria</option>
             {{#each categories}}
                 <option value="{{this.categoryName}}">{{this.categoryName}}</option>
             {{/each}}
         </select>
         <label for="sub-category">Sub Categoría: <span><a href="#formulario-subCategoria">(Nueva Sub-Categoria)</a></span></label>
-        <select name="sub-category" id="subCategories" required> 
+        <select name="sub-category" id="subCategoriesInAdd" required> 
         </select>
         <label for="brand">Marca: <span><a href="#formulario-marca">(Nueva Marca)</a></span></label>
         <select name="brand" id="brandInput" required>
@@ -142,4 +185,5 @@
 <script src="/js/realTimeProducts.Functions/CRUD.categories.js" ></script>
 <script src="/js/realTimeProducts.Functions/CRUD.brands.js" ></script>
 <script src="/js/realTimeProducts.Functions/CRUD.products.js" ></script>
+<script src="/js/products.Functions/products.Functions.js" ></script>
 <script src="/js/main.realTimeProducts.js"></script>

@@ -139,8 +139,7 @@ const updateProduct =async ()=>{
             "Content-Type": "application/json"
         },
         body: JSON.stringify(updatedProduct)
-
-    }
+        }
 
     fetchFunction(route,headers)
 
@@ -152,6 +151,37 @@ const updateProduct =async ()=>{
     cancelUpload.addEventListener('click',(e)=>{
         upDateform.parentNode.removeChild(upDateform)
     })
-    
+}
 
+const changePrice = (formId)=>{
+    const changePriceForm = document.getElementById(formId)
+    changePriceForm.addEventListener('submit', (e)=>{
+        const category = changePriceForm.elements["category"].value
+        const subCategory = changePriceForm.elements["sub-category"].value
+        const inputsRadio = document.getElementsByName('changeCondition')
+        let changeCondition 
+        inputsRadio.forEach(input => {
+            if (input.checked) {
+                changeCondition = input.value;
+              }
+        })
+        const brand = changePriceForm.elements["brand"].value
+        const percentaje = parseFloat(changePriceForm.elements["brand"].value)
+
+        const filter ={
+            category,
+            subCategory,
+            changeCondition,
+            brand,
+            percentaje
+        }
+
+        const params = new URLSearchParams(filter).toString()
+
+        const urlConParametros = `/realTimeProducts?${params}`
+
+        window.location.href = urlConParametros
+
+
+    })
 }

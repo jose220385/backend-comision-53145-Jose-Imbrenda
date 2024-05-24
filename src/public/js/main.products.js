@@ -27,7 +27,7 @@ getSubCategories('categoryInput', 'subCategories','change') */
 
 //Monitorea cambio en inputs y lanza funcion para filtrar productos
 const filterInputs = document.querySelectorAll(".filterInput")
-filterInputs.forEach(input => input.addEventListener('change', (e) => productsFilter()))
+filterInputs.forEach(input => input.addEventListener('change', (e) => productsFilter('/products')))
 
 //Monitorea cambios en paginacion y envia parametros para cambio de pagina
 changePage('prevPage')
