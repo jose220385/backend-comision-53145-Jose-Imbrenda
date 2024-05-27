@@ -6,13 +6,11 @@ const router = new Router()
 const mdbProductManager = new MDBProductManager();
 
 router.get('/', async (req,res)=>{
-    let {limit} = req.query
-    /* const products = await mdbProductManager.getProducts()
-    if(limit){
-        const limitedProducts = products.slice(0,limit)
-        return res.send({status: 'success', payload: limitedProducts})
-    } */
-    const{docs, page,hasPrevPage, hasNextPage,prevPage,nextPage} = await mdbProductManager.getProducts()
+    const {newPage, limit} = req.query
+    const {category, subCategory, brand, order, status} = req.query
+    const filter = {category, subCategory, brand, order, status}
+    const products = await mdbProductManager.getProducts({limit, newPage},filter)
+    console.log(products);
     res.send({status: 'success', payload: products})
 })
 router.get('/:pid', async (req,res)=>{

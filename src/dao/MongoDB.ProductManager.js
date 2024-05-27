@@ -77,7 +77,7 @@ export default class MDBProductManager {
     }
   }
 
-  getProducts = async({limit = 10, newPage = 1},filter) => {
+  getProducts = async({limit = 10, newPage = 1},filter ={}) => {
     const {category, subCategory, brand, order, status} = filter
     const query = {}
     if(category){query.category = category}
@@ -85,9 +85,15 @@ export default class MDBProductManager {
     if(brand){query.brand = brand}
     if(status === "withoutStock"){query.status = false} else {query.status = true}
 
-    const sortOption = order === "high"? -1:1
-
-    const products = await productModel.paginate(query,{limit,page: newPage,lean:true, sort:{price:sortOption}})
+    let products
+    if(order){
+        const sortOption = order === "high"? -1:1
+        products = await productModel.paginate(query,{limit,page: newPage,lean:true, sort:{price:sortOption}})
+        return products;
+      }
+    
+    products = await productModel.paginate(query,{limit,page: newPage,lean:true})
+    
     return products;
   }
 
@@ -128,6 +134,23 @@ updateProduct = async(id,productToUpdate) =>{
   }
   await productModel.findOneAndUpdate({_id:id}, updatedProduct, {new:true})
   return({status:"success", payload: updatedProduct})
+}
+
+changePrice = async(filter)=>{
+    const {changeCondition, category, subCategory, brand, percentaje} = filter
+    try {
+    const query = {}
+    if(category){query.category = category}
+    if(subCategory){query.subCategory = subCategory}
+    if(brand){query.brand = brand}
+
+    const products = await productModel.find(query)
+
+  
+  } catch (error) {
+    console.log(error);
+  }
+
 }
 
 // CRUD de categorias:

@@ -2,6 +2,7 @@ import express from 'express'
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import viewRouter from './routes/views.router.js'
+import sessionRouter from './routes/session.router.js'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils/utils.js'
 import { Server } from 'socket.io'
@@ -9,6 +10,8 @@ import { connect } from './config/db.js'
 import uploadRouter from './routes/upload.router.js'
 import {dirname} from "path"
 import { messageModel } from './dao/models/message.model.js'
+import session from 'express-session'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -36,6 +39,13 @@ app.use(express.urlencoded({extended: true}))
 
 app.use(express.static(`${dirname(__dirname)}/public`))
 
+app.use(cookieParser('secretFirm'))
+app.use(session({
+    secret:"secretCoder",
+    resave: true,
+    saveUninitialized: true
+}))
+
 app.engine('handlebars', handlebars.engine())
 app.set('views', `${dirname(__dirname)}/views`)
 app.set('view engine', 'handlebars')
@@ -43,6 +53,7 @@ app.set('view engine', 'handlebars')
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/upload', uploadRouter)
+app.use('/api/session', sessionRouter)
 
 app.use('/', viewRouter)
 
