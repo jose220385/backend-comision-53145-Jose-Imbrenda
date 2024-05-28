@@ -1,8 +1,18 @@
 <div>
-    <h1>{{title}}</h1>
+    {{#if userNotExist}}
+    <a href="/login" class="btn btn-outline-dark w-25 mt-3">Login</a>
+    {{/if}}
 
-    <a href="/carts/663b8b21e4aaa2c6dfa38648"> Ver Carrito</a>
+    {{#if userName}}
+    <a href="/api/sessions/logout" class="btn btn-outline-dark w-25 mt-3">Logout</a>
+    {{/if}}
+
+    <h1>Bienvenido {{userName}}</h1>
     
+    {{#if userName}}
+    <a href="/carts/663b8b21e4aaa2c6dfa38648"> Ver Carrito</a>
+    {{/if}}
+
     {{#if products}}
     <h2>Los productos en existencia son:</h2>
     <div class="mainContainer">

@@ -3,12 +3,21 @@ import { Router } from "express";
 import MDBProductManager from "../dao/MongoDB.ProductManager.js";
 import { messageModel } from "../dao/models/message.model.js";
 import MDBCartManager from "../dao/MongoDB.CartManager.js";
+import { auth } from "../middlewares/auth.middleware.js";
+
 const router = new Router()
 const productManager = new MDBProductManager();
 const cartManager = new MDBCartManager()
 
+
+router.get('/',async (req,res)=>{
+    if(!req.session.user) return res.redirect('/login')
+    return res.redirect('/products')
+}) 
+
 router.get('/products', async (req,res)=>{
-  
+    const userName = req.session?.user?.name
+    console.log(userName);
     const {newPage, limit} = req.query
     const {category, subCategory, brand, order, status} = req.query
     const filter = {category, subCategory, brand, order, status}
@@ -18,6 +27,8 @@ router.get('/products', async (req,res)=>{
     const categories = await productManager.getCategories()
 
     res.render('products', {
+        userName,
+        userNotExist: userName? false:true,
         title: 'Productos',
         styles: 'homeStyles.css',
         products: docs,
@@ -36,7 +47,7 @@ router.get('/products', async (req,res)=>{
     })
 })
 
-router.get('/realTimeProducts', async (req,res)=>{
+router.get('/realTimeProducts', auth, async (req,res)=>{
     const {newPage, limit} = req.query
     const {category, subCategory, brand, order, status} = req.query
     const filter = {category, subCategory, brand, order, status}
@@ -92,10 +103,17 @@ router.get('/login', async (req,res)=>{
 
 router.get('/register', async (req,res)=>{
     res.render('register',{
-        title: 'Login:',
+        title: 'Register',
         styles: 'homeStyles.css'
     })
 })
+
+/* router.get('/logout', async (req,res)=>{
+    res.render('login', {
+        title: 'Login:',
+        styles: 'homeStyles.css'
+    })
+}) */
 
 
 export default router

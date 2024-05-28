@@ -21,7 +21,7 @@ router.post('/register', async (req,res)=>{
     const result = await userManager.createUser(newUser)
     console.log(result);
 
-    res.send('usuario creado')
+    res.redirect('/login')
 
 })
 
@@ -40,14 +40,15 @@ router.post('/login', async (req,res)=>{
         name: userFound.first_name,
         admin: userFound.email === 'adminCoder@coder.com'
     }
-    return res.send({status:'success', payload: req.session.user})
+    
+    return res.redirect('/products') 
 })
 
 router.get('/logout',(req,res)=>{
     req.session.destroy(err =>{
         if(err) return({status:'error', error:err})
-        return res.send('logout')
     })
+    return res.redirect('/login')
 } )
 
 router.get('/current', auth, (req,res) =>{
