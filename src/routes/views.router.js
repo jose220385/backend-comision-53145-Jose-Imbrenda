@@ -8,8 +8,7 @@ const productManager = new MDBProductManager();
 const cartManager = new MDBCartManager()
 
 router.get('/products', async (req,res)=>{
-    //const products = await productManager.getProducts()
-
+  
     const {newPage, limit} = req.query
     const {category, subCategory, brand, order, status} = req.query
     const filter = {category, subCategory, brand, order, status}
@@ -79,6 +78,21 @@ router.get('/chat', async (req,res)=>{
     res.render('chat', {
         title: 'Chat:',
         messages,
+        styles: 'homeStyles.css'
+    })
+})
+
+//vistas para login y register
+router.get('/login', async (req,res)=>{
+    res.render('login', {
+        title: 'Login:',
+        styles: 'homeStyles.css'
+    })
+})
+
+router.get('/register', async (req,res)=>{
+    res.render('register',{
+        title: 'Login:',
         styles: 'homeStyles.css'
     })
 })
