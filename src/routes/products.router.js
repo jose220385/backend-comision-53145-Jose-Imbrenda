@@ -7,10 +7,16 @@ const mdbProductManager = new MDBProductManager();
 
 router.get('/', async (req,res)=>{
     const {newPage, limit} = req.query
-    const {category, subCategory, brand, order, status} = req.query
-    const filter = {category, subCategory, brand, order, status}
+    const filter={}
+    
+    if(req.query.category) filter.category = req.query.category
+    if(req.query.subCategory) filter.subCategory = req.query.subCategory
+    if(req.query.brand) filter.brand = req.query.brand
+    if(req.query.order) filter.order = req.query.order
+    if(req.query.status) filter.status = req.query.status
+
     const products = await mdbProductManager.getProducts({limit, newPage},filter)
-    console.log(products);
+   
     res.send({status: 'success', payload: products})
 })
 router.get('/:pid', async (req,res)=>{

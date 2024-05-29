@@ -78,16 +78,18 @@ export default class MDBProductManager {
   }
 
   getProducts = async({limit = 10, newPage = 1},filter ={}) => {
-    const {category, subCategory, brand, order, status} = filter
+    //const {category, subCategory, brand, order, status} = filter
     const query = {}
-    if(category){query.category = category}
-    if(subCategory){query.subCategory = subCategory}
-    if(brand){query.brand = brand}
-    if(status === "withoutStock"){query.status = false} else {query.status = true}
+    if(filter.category){query.category = filter.category}
+    if(filter.subCategory){query.subCategory = filter.subCategory}
+    if(filter.brand){query.brand = filter.brand}
+    if(filter.status){
+      filter.status === "withoutStock"? query.status = false : query.status = true
+    } 
 
     let products
-    if(order){
-        const sortOption = order === "high"? -1:1
+    if(filter.order){
+        const sortOption = filter.order === "high"? -1:1
         products = await productModel.paginate(query,{limit,page: newPage,lean:true, sort:{price:sortOption}})
         return products;
       }
