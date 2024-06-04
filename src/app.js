@@ -13,6 +13,8 @@ import { messageModel } from './dao/models/message.model.js'
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
+import passport from 'passport'
+import { initPassport } from './config/passport.config.js'
 
 const app = express()
 
@@ -60,6 +62,9 @@ app.use(session({
     saveUninitialized: true
     
 }))
+initPassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', `${dirname(__dirname)}/views`)
