@@ -16,7 +16,7 @@ router.get('/',async (req,res)=>{
 }) 
 
 router.get('/products', async (req,res)=>{
-    const userName = req.session?.user?.name
+    const userName = req.session?.user?.first_name
     const {newPage, limit} = req.query
 
     const filter={}

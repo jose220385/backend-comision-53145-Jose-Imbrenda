@@ -65,7 +65,7 @@ router.post('/login', passport.authenticate('login',{failureRedirect:'/failLogin
     if(!req.user) return res.status(400).send({status:'error', error:'credenciales invalidas'})
     req.session.user ={
         email: req.user.email,
-        name: req.user.first_name,
+        first_name: req.user.first_name,
         admin: req.user.email === 'adminCoder@coder.com'
     }
     return res.redirect('/products')
@@ -81,6 +81,7 @@ router.post('/failLogin', async (req,res)=>{
 router.get('/github',passport.authenticate('github',{scope: 'user:email'}), async (req,res)=>{})
 
 router.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/login'}), (req,res)=>{
+    console.log(req.user);
     req.session.user = req.user
     res.redirect('/products')
 })

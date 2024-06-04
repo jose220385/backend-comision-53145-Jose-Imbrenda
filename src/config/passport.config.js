@@ -68,7 +68,7 @@ export const initPassport = () =>{
             const user = await userManager.getUserBy({email:profile._json.email})
             if(!user){
                 let newUser ={
-                    first_name: profile._json.name,
+                    first_name: profile._json.email,
                     last_name: '',
                     email: profile._json.email,
                     password:''
