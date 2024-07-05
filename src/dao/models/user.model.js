@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import {Schema, model} from "mongoose";
 
 const collection = "users";
 
-const schema = new mongoose.Schema({
+const schema = new Schema({
     first_name: {
         type: String,
         required: true,
@@ -24,6 +24,11 @@ const schema = new mongoose.Schema({
         type: String,
         default: 'user'
         },
+    cart:{
+        type: Schema.Types.ObjectId,
+        ref:'carts'
+    },
+    age: Number
 });
 
-export const userModel = mongoose.model(collection, schema);
+export const userModel = model(collection, schema);

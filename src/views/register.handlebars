@@ -1,10 +1,12 @@
 <main class="container">
     <h1>Register</h1>
-   <form action="/api/sessions/register" method="POST" class="form-group w-50">
+   <form {{!-- action="/api/sessions/register" method="POST" --}} class="form-group w-50" id="registerForm">
     <label>Nombre</label>
     <input name="first_name" type="text" class="form-control">
     <label>Apellido</label>
     <input name="last_name" type="text" class="form-control">
+    <label>Edad</label>
+    <input name="age" type="number" class="form-control">
     <label>E-mail</label>
     <input name="email" type="email" class="form-control">
     <label>Password</label>
@@ -12,3 +14,5 @@
     <button type="submit" class="btn btn-outline-dark w-100 mt-3" >Enviar</button>
    </form>
 </main>
+<script src="/js/commonFunctions/fetch.js" ></script>
+<script src="/js/register.js" ></script>

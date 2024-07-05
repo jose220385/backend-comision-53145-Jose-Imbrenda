@@ -1,6 +1,6 @@
 <main class="container">
     <h1>Login</h1>
-   <form action="/api/sessions/login" method="POST" class="form-group w-50">
+   <form {{!-- action="/api/sessions/login" method="POST" --}} class="form-group w-50" id="loginForm">
     <label for="email">E-mail</label>
     <input name="email" type="email" class="form-control">
     <label for="">Password</label>
@@ -14,3 +14,5 @@
     
    </div>
 </main>
+<script src="/js/commonFunctions/fetch.js" ></script>
+<script src="/js/login.js" ></script>

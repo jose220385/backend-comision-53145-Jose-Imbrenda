@@ -4,7 +4,7 @@ const fetchFunction = (route,headers) =>{
     fetch(route, headers)
     .then(response => {
         if (!response.ok) {
-            throw new Error("Error al agregar el producto");
+            throw new Error("Error en la consulta");
         }
         return response.json()
     })

@@ -182,6 +182,5 @@ const changePrice = (formId)=>{
 
         window.location.href = urlConParametros
 
-
     })
 }

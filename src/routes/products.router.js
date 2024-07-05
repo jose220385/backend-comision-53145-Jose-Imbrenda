@@ -19,6 +19,7 @@ router.get('/', async (req,res)=>{
    
     res.send({status: 'success', payload: products})
 })
+
 router.get('/:pid', async (req,res)=>{
     const {pid} = req.params
     const productFound = await mdbProductManager.getProductById(pid)

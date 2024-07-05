@@ -4,6 +4,8 @@ import MDBProductManager from "../dao/MongoDB.ProductManager.js";
 import { messageModel } from "../dao/models/message.model.js";
 import MDBCartManager from "../dao/MongoDB.CartManager.js";
 import { auth } from "../middlewares/auth.middleware.js";
+//import { passportCall } from "../utils/passportCall.js";
+import { authorization } from "../utils/authorizationJWT.js";
 
 const router = new Router()
 const productManager = new MDBProductManager();
@@ -11,12 +13,13 @@ const cartManager = new MDBCartManager()
 
 
 router.get('/',async (req,res)=>{
-    if(!req.session.user) return res.redirect('/login')
+    if(!req.user) return res.redirect('/login')
     return res.redirect('/products')
 }) 
 
-router.get('/products', async (req,res)=>{
-    const userName = req.session?.user?.first_name
+router.get('/products', /* passportCall('jwt') */ async (req,res)=>{
+    const userName = req.user?.first_name
+    const cid = req.user?.cart
     const {newPage, limit} = req.query
 
     const filter={}
@@ -32,6 +35,7 @@ router.get('/products', async (req,res)=>{
     const categories = await productManager.getCategories()
 
     res.render('products', {
+        cid,
         userName,
         userNotExist: userName? false:true,
         title: 'Productos',
@@ -52,7 +56,7 @@ router.get('/products', async (req,res)=>{
     })
 })
 
-router.get('/realTimeProducts', auth, async (req,res)=>{
+router.get('/realTimeProducts', /* passportCall('jwt'), */ auth, async (req,res)=>{
     const {newPage, limit} = req.query
     const {category, subCategory, brand, order, status} = req.query
     const filter = {category, subCategory, brand, order, status}
@@ -74,12 +78,13 @@ router.get('/realTimeProducts', auth, async (req,res)=>{
 })
 
 router.get('/products/:pid', async (req,res)=>{
+    const cid = req.user?.cart
     const {pid} = req.params
     const product = await productManager.getProductById(pid)
-    res.render('productView', {...product, styles:"productStyles.css"})
+    res.render('productView', {...product, cid, styles:"productStyles.css"})
 })
 
-router.get('/carts/:cid', async (req,res)=>{
+router.get('/carts/:cid', /* passportCall('jwt'), */ async (req,res)=>{
     const {cid} = req.params
     const {_id, products} = await cartManager.getProductsByCartId(cid)
     res.render('cartView', {
@@ -89,7 +94,7 @@ router.get('/carts/:cid', async (req,res)=>{
     })
 })
 
-router.get('/chat', async (req,res)=>{
+router.get('/chat', /* passportCall('jwt'), */ async (req,res)=>{
     const messages = await messageModel.find().lean()
     res.render('chat', {
         title: 'Chat:',

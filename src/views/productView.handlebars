@@ -13,7 +13,7 @@
             <p>{{this.description}}</p>
             <h4>Precio: ${{this.price}}</h4>
         </div>
-        <form class="buttonContainer" id="addToCart">
+        <form class="buttonContainer" id="addToCart" data-cartID={{cid}}>
             <div>
             <label for="quantity">Cantidad:</label>
             <input type="number" name="quantity" min="1" max="100" value="1">

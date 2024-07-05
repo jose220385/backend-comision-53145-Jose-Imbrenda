@@ -15,6 +15,7 @@ import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
 import passport from 'passport'
 import { initPassport } from './config/passport.config.js'
+import { PRIVATE_KEY } from './utils/jsonwebtoken.js'
 
 const app = express()
 
@@ -42,12 +43,12 @@ app.use(express.urlencoded({extended: true}))
 
 app.use(express.static(`${dirname(__dirname)}/public`))
 
-app.use(cookieParser('secretFirm'))
+app.use(cookieParser(PRIVATE_KEY))
 /* app.use(session({
     secret:"secretCoder",
     resave: true,
     saveUninitialized: true
-})) */
+}))  */
 app.use(session({
     store: MongoStore.create({
         mongoUrl: `mongodb+srv://jsimbrenda:4F4ZJdNwWpQy9kl1@papelerasangerardo.wphphau.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=papeleraSanGerardo`,
@@ -62,9 +63,9 @@ app.use(session({
     saveUninitialized: true
     
 }))
-initPassport()
-app.use(passport.initialize())
-app.use(passport.session())
+initPassport() // llamamos a los midddlewares creados
+app.use(passport.initialize()) // inicializa passport con los middlewares que creamos
+app.use(passport.session()) //entrelaza passport con session
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', `${dirname(__dirname)}/views`)
