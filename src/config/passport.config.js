@@ -1,16 +1,17 @@
 import passport from "passport";
 import local from 'passport-local'
 //import jwt from 'passport-jwt'
-import MDBUserManager from "../dao/MongoDB.UserManager.js";
+//import MDBuserService from "../dao/MongoDB.userService.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import GithubStrategy from 'passport-github2'
 //import cookieParser from "cookie-parser";
 //import { PRIVATE_KEY } from "../utils/jsonwebtoken.js";
-import MDBCartManager from "../dao/MongoDB.CartManager.js";
+//import MDBcartService from "../dao/MongoDB.cartService.js";
+import { cartService, userService } from "../service/index.js";
 
 const LocalStrategy = local.Strategy
-const userManager = new MDBUserManager()
-const cartManager = new MDBCartManager()
+//const userService = new MDBuserService()
+//const cartService = new MDBcartService()
 /* const JWTStrategy = jwt.Strategy
 const ExtractJWT = jwt.ExtractJwt */
 
@@ -52,7 +53,7 @@ export const initPassport = () =>{
         try{
             if(!req.body.first_name || !req.body.last_name){return done ('Falta completar campos')}
             const{first_name, last_name, age} = req.body
-            const userFound = await userManager.getUserBy({email:username})
+            const userFound = await userService.getUserBy({email:username})
             
             //console.log('username:' + username);
             
@@ -61,7 +62,7 @@ export const initPassport = () =>{
                 return done(null,false)
             }
 
-            const {payload} = await cartManager.addCart()
+            const {payload} = await cartService.addCart()
 
             console.log('newcart:' + payload);
 
@@ -74,7 +75,7 @@ export const initPassport = () =>{
                 cart: payload._id
             }
 
-            const result = await userManager.createUser(newUser)
+            const result = await userService.createUser(newUser)
             return done (null, result)
 
         } catch(error){
@@ -87,7 +88,7 @@ export const initPassport = () =>{
         usernameField: 'email' //no se usa passReqToCallback porque no necesitamos acceso al req. el password y el username(email) lo captura internamente
     },async(username,password,done)=>{
         try{
-            const user= await userManager.getUserBy({email: username})
+            const user= await userService.getUserBy({email: username})
 
             if(!user) return done (null, false)
             if(!isValidPassword(password,{password: user.password})) return done (null, false)
@@ -103,7 +104,7 @@ export const initPassport = () =>{
     }) 
     passport.deserializeUser(async(id,done)=>{ //extrae el usuario del session a traves del id y lo busca en la BD
         try{
-            const user = await userManager.getUserBy({_id:id})
+            const user = await userService.getUserBy({_id:id})
             done(null, user)
         } catch (error){
             done(error)
@@ -117,7 +118,7 @@ export const initPassport = () =>{
     }, async (accessToken,refreshToken,profile,done)=>{
         try{
             console.log(profile);
-            const user = await userManager.getUserBy({email:profile._json.email})
+            const user = await userService.getUserBy({email:profile._json.email})
             if(!user){
                 let newUser ={
                     first_name: profile._json.email,
@@ -125,7 +126,7 @@ export const initPassport = () =>{
                     email: profile._json.email,
                     password:''
                 }
-                let result = await userManager.createUser(newUser)
+                let result = await userService.createUser(newUser)
                 done (null,result)
             } else {
                 done(null,user)

@@ -9,7 +9,7 @@ import { productModel } from './models/product.model.js';
 
 export default class MDBCartManager {
     constructor() {
-      (this.path = `${dirname(__dirname)}/carts.json`)
+      //(this.path = `${dirname(__dirname)}/carts.json`)
     }
 
       addCart = async()=>{

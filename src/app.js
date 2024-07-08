@@ -1,13 +1,10 @@
 import express from 'express'
-import productsRouter from './routes/products.router.js'
-import cartsRouter from './routes/carts.router.js'
-import viewRouter from './routes/views.router.js'
-import sessionsRouter from './routes/sessions.router.js'
+import routerApp from './routes/index.js'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils/utils.js'
 import { Server } from 'socket.io'
 import { connect } from './config/db.js'
-import uploadRouter from './routes/upload.router.js'
+//import uploadRouter from './routes/upload.router.js'
 import {dirname} from "path"
 import { messageModel } from './dao/models/message.model.js'
 import session from 'express-session'
@@ -71,12 +68,13 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', `${dirname(__dirname)}/views`)
 app.set('view engine', 'handlebars')
 
-app.use('/api/products', productsRouter)
+/* app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/upload', uploadRouter)
 app.use('/api/sessions', sessionsRouter)
+app.use('/', viewRouter) */
 
-app.use('/', viewRouter)
+app.use(routerApp)
 
 io.on('connection', socket =>{
     console.log('nuevo cliente conectado')

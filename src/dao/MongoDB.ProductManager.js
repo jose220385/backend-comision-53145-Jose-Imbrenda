@@ -1,19 +1,7 @@
-//import fs from 'fs'
-import { v4 as uuidv4 } from 'uuid';
-import mongoose from 'mongoose';
-import { __dirname } from '../utils/utils.js';
-import { readFile, writeFile } from "../utils/utils.js";
-import { categoryModel } from './models/category.model.js';
 import { productModel } from './models/product.model.js';
-import {brandModel} from './models/brand.model.js'
-//import { isExist } from "../utils.js";
-import {dirname} from "path"
-
-
 
 export default class MDBProductManager {
   constructor() {
-    (this.path = `${dirname(__dirname)}/products.json`)
   }
 
   calculatePrice = (cost,markdown) =>{
@@ -153,52 +141,6 @@ changePrice = async(filter)=>{
     console.log(error);
   }
 
-}
-
-// CRUD de categorias:
-
-addCategory = async(category) =>{
-  const newCategory = await categoryModel.create({categoryName:category.categoryName, subCategories:[]})
-  return ({status:"success", payload: newCategory})
-}
-
-addSubCategory = async(newSubCategory) =>{
-  const subCategoryToAdd = await categoryModel.findOneAndUpdate(
-    {categoryName:newSubCategory.categoryName},
-    { $addToSet: { subCategories: {_id:uuidv4(),subCategoryName: newSubCategory.subCategoryName} } },
-    { new: true, upsert: true }
-    )
-  return ({status:"success", payload: subCategoryToAdd})
-}
-
-getCategories = async() =>{
-  const categories = await categoryModel.find().lean()
-  return categories
-}
-
-getSubCategories = async(category) =>{
-  
-  try{
-    const categoryFound = await categoryModel.findOne({categoryName:category}).lean()
-    return categoryFound.subCategories
-  } catch (error){
-    console.log(error);
-  }
-}
-
-//CRUD Marcas
-
-addBrand= async(brand) =>{
-  console.log('log desde el manager') 
-  console.log( brand);
-
-  const newBrand = await brandModel.create({brandName:brand.brandName})
-  return ({status:"success", payload: newBrand})
-}
-
-getBrands = async() =>{
-  const brands = await brandModel.find().lean()
-  return brands
 }
 
 }

@@ -1,17 +1,60 @@
 import { Router } from "express";
-import { auth } from "../middlewares/auth.middleware.js"
-import MDBUserManager from "../dao/MongoDB.UserManager.js";
+import { auth } from "../../middlewares/auth.middleware.js"
+import MDBUserManager from "../../dao/MongoDB.UserManager.js";
 //import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import passport from "passport";
 //import { generateToken } from "../utils/jsonwebtoken.js";
 //import { passportCall } from "../utils/passportCall.js";
 //import { authorization } from "../utils/authorizationJWT.js";
-import MDBCartManager from "../dao/MongoDB.CartManager.js";
+import MDBCartManager from "../../dao/MongoDB.CartManager.js";
+import SessionsController from "../../controllers/sessions.controller.js";
 
 
 const router = new Router() 
-const userManager = new MDBUserManager()
-const cartManager = new MDBCartManager()
+/* const userManager = new MDBUserManager()
+const cartManager = new MDBCartManager() */
+
+const{
+    register,
+    failRegister,
+    login,
+    failLogin,
+    githubLogin,
+    githubCallback,
+    logout,
+    current,
+    pruebas
+}= new SessionsController()
+
+
+
+//Register con Passport-session
+router.post('/register', passport.authenticate('register',{failureRedirect:'/failRegister'}), register )
+
+router.post('/failRegister', failRegister) //ruta por si falla el register
+
+//Login con Passport-session
+router.post('/login', passport.authenticate('login',{failureRedirect:'/failLogin'}),login)
+router.post('/failLogin', failLogin)
+
+
+//Login con github
+router.get('/github',passport.authenticate('github',{scope: 'user:email'}), githubLogin)
+router.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/login'}), githubCallback)
+
+
+router.get('/logout',logout )
+
+//Ruta de prueba para middleware
+router.get('/current', auth, current)
+
+router.get('/pruebas', pruebas)
+
+export default router
+
+
+
+//Variante con passport-jwt
 
 /* router.post('/register', async (req,res)=>{
     console.log(req.body);
@@ -103,65 +146,7 @@ router.post('/login', async (req,res)=>{
 }
 }) */
 
-//Register con Passport-session
-router.post('/register', passport.authenticate('register',{failureRedirect:'/failRegister'}), async (req,res)=>{
-    return res.send({status:'succes', payload: 'usuario registrado con exito'})
-})
-router.post('/failRegister', async (req,res)=>{
-    console.log('fallo la estrategia de registro');
-    res.send({error:'failed'})
-}) //ruta por si falla el register
-
-//Login con Passport-session
-router.post('/login', passport.authenticate('login',{failureRedirect:'/failLogin'}),async (req,res)=>{
-    if(!req.user) return res.status(400).send({status:'error', error:'credenciales invalidas'})
-    req.session.user ={
-        email: req.user.email,
-        first_name: req.user.first_name,
-        role: req.user.email === 'adminCoder@coder.com'? 'admin':'user',
-        cart: req.user.cart
-    }
-    //res.redirect('/products')
-    return res.send({status:'succes', payload: req.session.user})
-})
-router.post('/failLogin', async (req,res)=>{
-    console.log('fallo la estrategia de login');
-    res.send({error:'failed'})
-})
-
-
-//Login con github
-
-router.get('/github',passport.authenticate('github',{scope: 'user:email'}), async (req,res)=>{})
-
-router.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/login'}), (req,res)=>{
-    console.log(req.user);
-    req.session.user = req.user
-    res.redirect('/products')
-})
-
-
-router.get('/logout',(req,res)=>{
-    req.session.destroy(err =>{
-        if(err) return({status:'error', error:err})
-    })
-    return res.redirect('/login')
-   /*  try{
-        res.clearCookie('papeleraCookieToken').status(204).send()
-        return res.redirect('/login')
-    } catch(error){
-        console.log(error);
-    } */
-} )
-
 /* router.get('/current', passport.authenticate('jwt', {session: false}), (req,res) =>{
     console.log(req.user);
     return res.send('datos sensibles')
 }) */
-
-router.get('/current', auth,(req,res) =>{
-    console.log(req.user);
-    return res.send('datos sensibles')
-})
-
-export default router

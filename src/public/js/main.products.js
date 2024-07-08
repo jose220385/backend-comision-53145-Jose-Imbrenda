@@ -1,7 +1,3 @@
-console.log('Script de products')
-
-
-
 //Mantener seleccionados los select al momento de filtrar
 
 contentLoadWithFilter('categoryInput','category')
