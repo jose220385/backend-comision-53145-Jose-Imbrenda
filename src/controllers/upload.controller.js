@@ -30,7 +30,25 @@ class UploadController {
             delete row[Object.keys(row)[0]];
         });
     
-        await this.productService.addProducts(data)
+        const dataProcessed = data.map(product => {
+            const price = parseFloat(product.cost) * parseFloat(product.markdown) / 100
+            return {
+            code: product.code,
+            category: product.category,
+            subCategory: product.subCategory,
+            title: product.title,
+            description: product.description,
+            brand: product.brand,
+            provider: product.provider,
+            cost: parseFloat(product.cost),
+            markdown: parseFloat(product.markdown),
+            price,
+            thumbnail: product.thumbnail,
+            stock: parseInt(product.stock),
+            status: true
+          }});
+          
+        await this.productService.addProducts(dataProcessed)
     
         const {io} = req
         io.emit('massiveProductsUpload', await this.productService.getProducts({},req.filter))

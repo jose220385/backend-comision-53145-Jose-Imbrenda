@@ -84,7 +84,7 @@ const getSubCategories = async (nodeCategoriesId, nodeSubCategoriesId) =>{
     })
     .then(data => {
         subCategoriesInput.innerHTML += `<option name="allCategories" value=''>Todas las sub-Categorias</option>`
-        data.forEach(d =>{
+        data.payload.forEach(d =>{
             subCategoriesInput.innerHTML += `<option name=${d.subCategoryName} value='${d.subCategoryName}'>${d.subCategoryName}</option>`
         })
 

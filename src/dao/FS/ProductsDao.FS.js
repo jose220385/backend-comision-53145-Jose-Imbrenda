@@ -1,14 +1,13 @@
 //import fs from 'fs'
 import { v4 as uuidv4 } from 'uuid';
-import { __dirname } from '../utils/utils.js';
-import { readFile, writeFile } from "../utils/utils.js";
+import { __dirname } from '../../utils/utils.js';
+import { readFile, writeFile } from "../../utils/utils.js";
 /* import { productModel } from './models/product.model.js';
 import { isExist } from "../utils.js"; */
 import {dirname} from "path"
 
 
-
-export default class FSProductManager {
+export default class ProductsDaoFs {
   constructor() {
     (this.path = `${dirname(__dirname)}/products.json`)
   }

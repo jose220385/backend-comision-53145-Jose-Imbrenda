@@ -1,10 +1,10 @@
 
 import { v4 as uuidv4 } from 'uuid';
-import { __dirname } from '../utils/utils.js';
-import { readFile, writeFile } from "../utils/utils.js";
+import { __dirname } from '../../utils/utils.js';
+import { readFile, writeFile } from "../../utils/utils.js";
 import {dirname} from "path"
 
-export default class CartManager {
+export default class CartsDaoFs {
     constructor() {
       (this.path = `${dirname(__dirname)}/carts.json`)
     }

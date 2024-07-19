@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { auth } from "../middlewares/auth.middleware.js";
+import { auth, authUser } from "../middlewares/auth.middleware.js";
 //import { passportCall } from "../utils/passportCall.js";
 //import { authorization } from "../utils/authorizationJWT.js";
 import ViewsController from "../controllers/views.controller.js";
@@ -15,7 +15,8 @@ const{
     cartViewById,
     chatView,
     loginView,
-    registerView
+    registerView,
+    ticketView
 }= new ViewsController()
 
 router.get('/', homeView) 
@@ -26,14 +27,16 @@ router.get('/realTimeProducts', /* passportCall('jwt'), */ auth, realTimeProduct
 
 router.get('/products/:pid', productViewById)
 
-router.get('/carts/:cid', /* passportCall('jwt'), */ cartViewById)
+router.get('/carts/:cid', /* passportCall('jwt'), */ /* authUser, */ cartViewById)
 
-router.get('/chat', /* passportCall('jwt'), */ chatView)
+router.get('/chat', /* passportCall('jwt'), */ authUser, chatView)
 
 //vistas para login y register
 router.get('/login', loginView)
 
 router.get('/register', registerView)
+
+router.get('/ticket', ticketView)
 
 /* router.get('/logout', async (req,res)=>{
     res.render('login', {

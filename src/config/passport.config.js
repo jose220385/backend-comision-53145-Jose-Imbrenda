@@ -62,9 +62,9 @@ export const initPassport = () =>{
                 return done(null,false)
             }
 
-            const {payload} = await cartService.addCart()
+            const cart = await cartService.addCart()
 
-            console.log('newcart:' + payload);
+            console.log('newcart:' + cart);
 
             const newUser ={
                 first_name,
@@ -72,7 +72,7 @@ export const initPassport = () =>{
                 age,
                 email: username,
                 password: createHash(password),
-                cart: payload._id
+                cart
             }
 
             const result = await userService.createUser(newUser)

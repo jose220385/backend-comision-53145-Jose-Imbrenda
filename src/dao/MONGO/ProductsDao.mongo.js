@@ -1,47 +1,13 @@
+import DaoMongo from './daoMongo.js';
 import { productModel } from './models/product.model.js';
 
-export default class MDBProductManager {
+export default class ProductDaoMongo extends DaoMongo{
   constructor() {
+    super(productModel)
   }
 
-  calculatePrice = (cost,markdown) =>{
-    const retailPrice = cost + ((cost * markdown) / 100)
-    return retailPrice
-  }
 
-  addProduct = async (object) => {
-    try {
-      const query = productModel.where({code: object.code})
-      const codeValidation = await query.findOne().lean()
-    if (codeValidation) {
-      console.log('Error');
-      return {status:"Failed", payload: "El codigo corresponde a otro producto"}
-    }
-
-      const newProduct = await productModel.create({
-        code: object.code,
-        category: object.category,
-        subCategory: object.subCategory,
-        title: object.title,
-        description: object.description,
-        brand: object.brand,
-        provider: object.provider,
-        cost: object.cost,
-        markdown: object.markdown,
-        price: this.calculatePrice(object.cost,object.markdown),
-        thumbnail: object.thumbnail,
-        stock: parseInt(object.stock),
-        status: true
-      });
-
-      return ({status: "success", payload: newProduct})
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  addProducts = async (products) =>{
+  /* addProducts = async (products) =>{
     try{
           const dataProcessed = products.map(product => {
           return {
@@ -63,6 +29,14 @@ export default class MDBProductManager {
       } catch (error) {
       console.log(error);
     }
+  } */
+
+  /* getProductsWithPaginate = async ({limit = 10, newPage = 1},filter ={}) =>{
+    return await productModel.paginate(query,{limit,page: newPage,lean:true})
+  }
+
+  getProductsWithPaginateSort = async ({limit = 10, newPage = 1},filter ={}, sortOption) =>{
+    return await productModel.paginate(query,{limit,page: newPage,lean:true, sort:{price:sortOption}})
   }
 
   getProducts = async({limit = 10, newPage = 1},filter ={}) => {
@@ -87,15 +61,7 @@ export default class MDBProductManager {
     return products;
   }
 
- getProductById = async(id) =>{
-    try{
-    const productFound = await productModel.findById(id).lean()
-    console.log(productFound);
-    return productFound;
-  } catch (error) {
-    console.log(error);
-  }
-}
+getProductById = async(id) =>{return await productModel.findById(id).lean()}
  
 
 deleteProduct = async(id) =>{
@@ -141,7 +107,7 @@ changePrice = async(filter)=>{
     console.log(error);
   }
 
-}
+} */
 
 }
 

@@ -31,7 +31,7 @@ const getBrands=()=>{
         return response.json()
     })
     .then(data => {
-        return data
+        return data.payload
     })
     .catch(error => {
         console.error("Error:", error);

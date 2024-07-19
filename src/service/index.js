@@ -1,23 +1,30 @@
-import MDBBrandManager from "../dao/MongoDB.BrandsManager.js";
-import MDBCartManager from "../dao/MongoDB.CartManager.js";
-import MDBCategoryManager from "../dao/MongoDB.CategoryManager.js";
-import MDBMessageManager from "../dao/MongoDB.MessageManager.js";
-import MDBProductManager from "../dao/MongoDB.ProductManager.js";
-import MDBUserManager from "../dao/MongoDB.UserManager.js";
+import { BrandsDao, CartsDao, CategoriesDao, MessagesDao, ProductsDao, TicketsDao, UsersDao } from "../dao/factory.js";
+import ProductRepository from "../repository/product.repository.js";
+import UserRepository from "../repository/user.repository.js";
+import CartRepository from "../repository/cart.repository.js"
+import BrandRepository from "../repository/brand.repository.js";
+import MessageRepository from "../repository/message.repository.js";
+import CategoryRepository from "../repository/category.repository.js";
+import TicketRepository from "../repository/ticket.repository.js";
+
+
 
 //Service de productos y derivados
-export const productService = new MDBProductManager()
-export const categoryService = new MDBCategoryManager()
-export const brandService = new MDBBrandManager()
+export const productService = new ProductRepository (new ProductsDao) 
+export const categoryService = new CategoryRepository( new CategoriesDao)
+export const brandService = new BrandRepository(new BrandsDao)
 
 //Service de Carts
-export const cartService = new MDBCartManager()
+export const cartService = new CartRepository(new CartsDao)
 
 //Service de Users
-export const userService = new MDBUserManager()
+export const userService = new UserRepository(new UsersDao) 
 
 //Service de mensajes
-export const messageService = new MDBMessageManager()
+export const messageService = new MessageRepository(new MessagesDao)
+
+//Service de Tickets
+export const ticketService = new TicketRepository(new TicketsDao)
 
 
 

@@ -20,6 +20,8 @@ class ViewsController{
 
     productsView = async (req,res)=>{
         try {
+            delete req.session.ticket
+            console.log(req.session.ticket);
             const userName = req.user?.first_name
             const cid = req.user?.cart
             const {newPage, limit} = req.query
@@ -146,6 +148,29 @@ class ViewsController{
         }
     }
 
+    ticketView = async(req,res)=>{
+        try {
+            if (!req.session.ticket) {
+                return res.status(400).send("No hay ticket en la sesión");
+            }
+            console.log(req.session.ticket);
+            const{totalPurchase, productsWithStock,productsWithoutStock} = req.session?.ticket
+            const productsWithoutStockExist = productsWithoutStock.length>0?true:false
+            res.render('ticket',{
+                title: 'Ticket',
+                styles:"cartStyles.css",
+                totalPurchase,
+                productsWithStock,
+                productsWithoutStock,
+                productsWithoutStockExist
+            })
+        } catch (error) {
+            console.log(error);
+            }
+    }
+
 }
+
+
 
 export default ViewsController

@@ -1,0 +1,49 @@
+<main>
+    <div class="ticketContainer">
+        <h1>Resumen de compra</h1>
+        {{#if productsWithoutStockExist}}
+        <div id="productsWithoutStock">
+            <h3>Los siguientes productos no pudieron ser procesados por falta de stock al momento de la compra:</h3>
+            <h5>Los dejaremos disponibles en su carrito para una futura compra</h5>
+            {{#each productsWithoutStock}}
+            <div class="productContainer" id={{this.productId._id}}>
+                <div class="cartImageContainer">
+                    <p>img</p>
+                    {{!-- <img src="{{this.productId.thumbnail}}" alt=""> --}}
+                </div>
+                <p>Cod: {{this.productId.code}}</p>
+                <p><strong> {{this.productId.title}}</strong></p>
+                <h4>$ <span>{{this.productId.price}}</span></h4>
+                <h4 class="quantity">Cantidad:<span>{{this.quantity}} </span></h4>
+            </div>
+        </div>
+            {{/each}}
+            {{/if}}
+            
+        <div id="productsWithStock">
+            <h3>Su resumen de compra es:</h3>
+            {{#each productsWithStock}}
+            <div class="productContainer" id={{this.productId._id}}>
+                <div class="cartImageContainer">
+                    <p>img</p>
+                    {{!-- <img src="{{this.productId.thumbnail}}" alt=""> --}}
+                </div>
+                <p>Cod: {{this.productId.code}}</p>
+                <p><strong> {{this.productId.title}}</strong></p>
+                <h4>$ <span>{{this.productId.price}}</span></h4>
+                <h4 class="quantity">Cantidad:<span>{{this.quantity}}</span></h4>
+            </div>
+            {{/each}}
+        
+            <div class="totalContainer">
+                <h3>Total de la compra:  $<span id="total">{{totalPurchase}}</span></h3>
+            </div>
+            <div class="finishButtonsContainer">
+                <button id="purchaseCancellation">Cancelar compra</button>
+                <button id="goToPay">Ir a pagar...</button>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="/js/commonFunctions/fetch.js" ></script>
+<script src="/js/ticket.js" ></script>

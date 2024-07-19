@@ -7,6 +7,39 @@ class ProductsController{
         this.productService = productService
     }
 
+createProduct  = async (req,res)=>{
+    try {
+        const codeValidation = await this.productService.getProductBy({code:req.body.code})
+        console.log(codeValidation);
+        if (codeValidation) {
+            console.log('Error');
+            return res.send({status:"Failed", payload: "El codigo corresponde a otro producto"})
+          }
+        const {code,category,subCategory,title,description,brand,provider,cost,markdown,thumbnail,stock, status} = req.body
+        const price = cost + ((cost * markdown) / 100)
+        const newProduct = await this.productService.addProduct({
+            code,
+            category,
+            subCategory,
+            title,
+            description,
+            brand,
+            provider,
+            cost,
+            markdown,
+            price,
+            thumbnail,
+            stock: parseInt(stock),
+            status: true
+          })
+        res.send({status: "success", payload: newProduct})
+        const {io} = req
+        io.emit('realTimeProducts', await this.productService.getProducts({},req.filter))
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 getProducts    = async (req,res)=>{
     try {
         const {newPage, limit} = req.query
@@ -15,12 +48,19 @@ getProducts    = async (req,res)=>{
         if(req.query.category) filter.category = req.query.category
         if(req.query.subCategory) filter.subCategory = req.query.subCategory
         if(req.query.brand) filter.brand = req.query.brand
+        
+        if(req.query.status) {
+            req.query.status === "withoutStock"? filter.status = false : filter.status = true
+          } 
+
         if(req.query.order) filter.order = req.query.order
-        if(req.query.status) filter.status = req.query.status
+
 
         const products = await this.productService.getProducts({limit, newPage},filter)
     
         res.send({status: 'success', payload: products})
+
+        
     } catch (error) {
         console.log(error);
     }   
@@ -39,22 +79,31 @@ getProduct     = async (req,res)=>{
     }
 }
 
-createProduct  = async (req,res)=>{
-    try {
-        res.send(await this.productService.addProduct(req.body))
-        const {io} = req
-        io.emit('realTimeProducts', await this.productService.getProducts())
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 updateProduct  = async (req,res)=>{
     try {
         const {pid} = req.params
-        res.send(await this.productService.updateProduct(pid,req.body))
+        const productNotUpdated = await this.productService.getProductById(pid)
+        const productToUpdate = req.body
+        const cost = productToUpdate.cost === ""? productNotUpdated.cost : productToUpdate.cost
+        const markdown= productToUpdate.markdown === ""? productNotUpdated.markdown : productToUpdate.markdown
+        const price = cost + ((cost * markdown) / 100) 
+        const updatedProduct = {
+                code: productToUpdate.code === ""? productNotUpdated.code : productToUpdate.code,
+                title: productToUpdate.title === ""? productNotUpdated.title : productToUpdate.title,
+                description: productToUpdate.description === ""? productNotUpdated.description : productToUpdate.description,
+                cost,
+                markdown,
+                price,
+                thumbnail: productToUpdate.thumbnail === ""? productNotUpdated.thumbnail : productToUpdate.thumbnail,
+                stock: productToUpdate.stock === ""? productNotUpdated.stock : productToUpdate.stock,
+                category: productToUpdate.category === ""? productNotUpdated.category : productToUpdate.category,
+                subCategory: productToUpdate.subCategory === ""? productNotUpdated.subCategory : productToUpdate.subCategory,
+                status: true,
+            }
+        const result = await this.productService.updateProduct({_id:pid},updatedProduct)
+        res.send({status:'success', payload: result})
         const {io} = req
-        io.emit('realTimeProducts-upload', await this.productService.getProducts())
+        io.emit('realTimeProducts-upload', await this.productService.getProducts({},req.filter))
     } catch (error) {
         console.log(error);
     }
@@ -63,9 +112,9 @@ updateProduct  = async (req,res)=>{
 deleteProduct  = async(req,res)=>{
     try {
         const {pid} = req.params
-        res.send(await this.productService.deleteProduct(pid))
+        res.send(await this.productService.deleteProductById(pid))
         const {io} = req
-        io.emit('realTimeProducts-delete', await this.productService.getProducts())
+        io.emit('realTimeProducts-delete', await this.productService.getProducts({},req.filter))
     } catch (error) {
         console.log(error);
     }   
@@ -82,6 +131,14 @@ changePrice = async (req,res)=>{
     }
     /* const {io} = req
     io.emit('realTimeProducts-upload', await productService.getProducts()) */
+}
+
+testProduct = async (req,res) =>{
+    try {
+        res.send(await this.productService.test())
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 }

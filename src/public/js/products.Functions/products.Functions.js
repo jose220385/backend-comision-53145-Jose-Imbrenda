@@ -36,7 +36,7 @@ const getSubCategoriesInFilter = async (nodeCategoriesId, nodeSubCategoriesId,ev
         return response.json()
     })
     .then(data => {
-        data.forEach(d =>{
+        data.payload.forEach(d =>{
             subCategoriesInput.innerHTML += `<option name=${d.subCategoryName} value='${d.subCategoryName}'>${d.subCategoryName}</option>`
         })
         setImputValue('subCategories','subCategory')

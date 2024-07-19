@@ -2,9 +2,10 @@ const socketOn =(emitName)=>{
     socket.on(emitName, data =>{
         console.log("cliente escuchando");
         if(data){
+            console.log(data);
             const productsContainer = document.getElementById('productsContainer')
             productsContainer.innerHTML=''
-            data.forEach(p => {
+            data.docs.forEach(p => {
                 const divProducto = document.createElement('div')
                 divProducto.innerHTML = `
                                         <h3>${p.title}</h3>

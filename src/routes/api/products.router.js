@@ -9,7 +9,8 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    changePrice
+    changePrice,
+    testProduct
 } = new ProductsController()
 
 const {
@@ -24,6 +25,8 @@ const{
     getBrands
 }= new BrandsController()
 
+// CRUD PRODUCTOS
+
 const router = new Router() 
 
 router.get('/', getProducts)
@@ -37,6 +40,8 @@ router.put('/:pid', updateProduct)
 router.delete('/:pid', deleteProduct)
 
 router.put('/changePrice', changePrice)
+
+router.get('/test/test', testProduct)
 
 //CRUD Categorias:
 

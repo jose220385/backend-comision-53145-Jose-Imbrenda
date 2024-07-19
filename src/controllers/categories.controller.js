@@ -1,5 +1,5 @@
 import { categoryService } from "../service/index.js"
-
+import {v4 as uuidv4} from 'uuid'
 
 class CategoriesController{
     constructor(){
@@ -7,21 +7,46 @@ class CategoriesController{
     }
 
     createCategory = async (req,res)=>{
-        res.send(await this.categoryService.addCategory(req.body))
+        try {
+            const newCategory = await this.categoryService.addCategory(req.body)
+            return res.send({status:'success', payload: newCategory})
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
     
     getCategories = async (req,res)=>{
-        res.send(await this.categoryService.getCategories())
+        try {
+            const categories = await this.categoryService.getCategories()
+            return res.send({status:'success', payload: categories})
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     createSubCategory = async (req,res)=>{
-        res.send(await this.categoryService.addSubCategory(req.body))
+        try {
+            const newSubCategory = req.body
+            const result = await this.categoryService.addSubCategory(
+                {categoryName:newSubCategory.categoryName},
+                { $addToSet: { subCategories: {_id:uuidv4(),subCategoryName: newSubCategory.subCategoryName} } }
+            )
+            return res.send({status:'success', payload: result})
+        } catch (error) {
+            console.log(error);
+        }
     }
     
     getSubCategoryByCategory = async (req,res)=>{
-        const {catId} = req.params
-        console.log("log del router"+catId);
-        res.send(await this.categoryService.getSubCategories(catId))
+        try {
+            const {catId} = req.params
+            //console.log("log del router"+catId);
+            const categoryFound = await this.categoryService.getSubCategories({categoryName:catId})
+            return res.send({status:'success', payload: categoryFound.subCategories})
+        } catch (error) {
+            console.log(error);
+        }
     }
     
 }

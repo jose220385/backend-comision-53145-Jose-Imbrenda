@@ -1,4 +1,6 @@
 import { objectConfig } from "../dotenv.config.js";
+import UsersCurrentDto from "../dtos/usersCurrent.dto.js";
+import { userService } from "../service/index.js";
 
 class SessionsController{
     constructor(){
@@ -28,7 +30,7 @@ class SessionsController{
             req.session.user ={
             email: req.user.email,
             first_name: req.user.first_name,
-            role: req.user.email === this.adminMail? 'admin':'user',
+            role: req.user.email === objectConfig.adminMail? 'admin':'user',
             cart: req.user.cart
         }
             return res.send({status:'succes', payload: req.session.user})
@@ -74,8 +76,11 @@ class SessionsController{
 
     current = (req,res) =>{
         try {
-            console.log(req.user);
-            return res.send("Datos sensibles")
+            const{email} = req.user
+            const user = userService.getUserBy({email})
+            const userDTO = new UsersCurrentDto(user)
+            //console.log(req.user);
+            return res.send(userDTO)
         } catch (error) {
             console.log(error);
         }       
