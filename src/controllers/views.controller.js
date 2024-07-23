@@ -1,4 +1,5 @@
 import { brandService, cartService, categoryService, messageService, productService } from "../service/index.js";
+import  {generateProducts}  from "../utils/generateProducts.js";
 
 class ViewsController{
     constructor(){
@@ -153,7 +154,6 @@ class ViewsController{
             if (!req.session.ticket) {
                 return res.status(400).send("No hay ticket en la sesión");
             }
-            console.log(req.session.ticket);
             const{totalPurchase, productsWithStock,productsWithoutStock} = req.session?.ticket
             const productsWithoutStockExist = productsWithoutStock.length>0?true:false
             res.render('ticket',{
@@ -167,6 +167,21 @@ class ViewsController{
         } catch (error) {
             console.log(error);
             }
+    }
+
+    productMockView = async(req,res) =>{
+        let products = []
+        for (let index = 0; index < 100; index++) {
+            const product = await generateProducts()
+            products.push(product)
+        }
+        
+        //productsMock = generateProducts()
+        res.render('productMock',{
+            title: 'MockProducts',
+            styles:"homeStyles.css",
+            products,
+        })
     }
 
 }

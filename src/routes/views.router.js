@@ -4,6 +4,7 @@ import { auth, authUser } from "../middlewares/auth.middleware.js";
 //import { passportCall } from "../utils/passportCall.js";
 //import { authorization } from "../utils/authorizationJWT.js";
 import ViewsController from "../controllers/views.controller.js";
+import compression from 'express-compression'
 
 const router = new Router()
 
@@ -16,7 +17,8 @@ const{
     chatView,
     loginView,
     registerView,
-    ticketView
+    ticketView,
+    productMockView
 }= new ViewsController()
 
 router.get('/', homeView) 
@@ -27,7 +29,7 @@ router.get('/realTimeProducts', /* passportCall('jwt'), */ auth, realTimeProduct
 
 router.get('/products/:pid', productViewById)
 
-router.get('/carts/:cid', /* passportCall('jwt'), */ /* authUser, */ cartViewById)
+router.get('/carts/:cid', /* passportCall('jwt'), */ authUser, cartViewById)
 
 router.get('/chat', /* passportCall('jwt'), */ authUser, chatView)
 
@@ -36,7 +38,9 @@ router.get('/login', loginView)
 
 router.get('/register', registerView)
 
-router.get('/ticket', ticketView)
+router.get('/ticket', authUser, ticketView)
+
+router.get('/mockingproducts',compression(), productMockView)
 
 /* router.get('/logout', async (req,res)=>{
     res.render('login', {

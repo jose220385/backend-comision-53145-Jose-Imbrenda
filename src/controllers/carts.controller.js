@@ -1,3 +1,5 @@
+import { CustomError } from "../service/errors/CustomError.js";
+import { emptyCartError } from "../service/errors/info.js";
 import { cartService, productService } from "../service/index.js";
 
 
@@ -100,8 +102,6 @@ class CartsController {
             const {pid} = req.params
             const quantity = parseInt(req.body.quantity)
 
-            console.log(quantity);
-
             const productUpdated = await this.cartService.changeProductQuantity(
                 { _id: cid, "products.productId": pid },
                 { $set: { "products.$.quantity": quantity } }
@@ -114,12 +114,20 @@ class CartsController {
         }
     }
     
-    purchaseCart = async(req,res) =>{
+    purchaseCart = async(req,res,next) =>{
         try {
             const {cid} = req.params 
             const {products} = await this.cartService.getProductsByCartId(cid)
             
-            if(products.length === 0){return res.send("No hay productos en el carrito")}
+            if(products.length === 0){
+                CustomError.createError({
+                    name: 'Carrito Vacio. No se puede continuar la operacion',
+                    cause: emptyCartError(),
+                    code: EError.EMPTY_CART_ERROR
+                })
+                return
+                //return res.send("No hay productos en el carrito")
+            }
 
             let productsWithStock = []
             let productsWithoutStock =[]
@@ -164,7 +172,7 @@ class CartsController {
             //res.send({status:"success", payload: {totalPurchase, productsWithStock, productsWithoutStock}})
 
         } catch (error) {
-            console.log(error);
+            next(error)
         }
         
     }

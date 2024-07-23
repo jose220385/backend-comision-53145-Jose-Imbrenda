@@ -2,6 +2,7 @@ import { Router } from "express";
 import ProductsController from "../../controllers/products.controller.js";
 import CategoriesController from "../../controllers/categories.controller.js";
 import BrandsController from "../../controllers/brands.controller.js";
+import { handleErrors } from "../../middlewares/errors/index.js";
 
 const {
     getProducts,
@@ -33,7 +34,7 @@ router.get('/', getProducts)
 
 router.get('/:pid', getProduct)
 
-router.post('/', createProduct)
+router.post('/', handleErrors(), createProduct)
 
 router.put('/:pid', updateProduct)
 

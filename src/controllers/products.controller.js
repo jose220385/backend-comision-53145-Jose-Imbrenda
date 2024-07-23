@@ -1,4 +1,6 @@
 //import MDBProductManager from "../dao/MongoDB.ProductManager"
+import { CustomError } from '../service/errors/CustomError.js'
+import { generateProductError } from '../service/errors/info.js'
 import {productService} from '../service/index.js'
 
 
@@ -7,15 +9,54 @@ class ProductsController{
         this.productService = productService
     }
 
-createProduct  = async (req,res)=>{
+createProduct  = async (req,res,next)=>{
     try {
+        if( !req.body.code ||
+            !req.body.category || typeof req.body.category  !== 'string' ||
+            !req.body.subCategory || typeof req.body.subCategory  !== 'string' ||
+            !req.body.title || typeof req.body.title  !== 'string' ||
+            !req.body.description || typeof req.body.description  !== 'string' ||
+            !req.body.brand || typeof req.body.brand  !== 'string' ||
+            !req.body.provider || typeof req.body.provider  !== 'string' ||
+            !req.body.cost || typeof req.body.cost  !== 'number'||
+            !req.body.markdown || typeof req.body.markdown  !== 'number'||
+            !req.body.thumbnail || typeof req.body.thumbnail  !== 'string' ||
+            !req.body.stock || typeof req.body.stock  !== 'number'
+            ){
+            //return res.status(404).send('Falta completar campos')
+            CustomError.createError({
+                name: 'Error al crear un Usuario',
+                cause: generateProductError({
+                    code : req.body.code, 
+                    category : req.body.category, 
+                    subCategory: req.body.subCategory, 
+                    title: req.body.title, 
+                    description:req.body.description,
+                    brand:req.body.brand,
+                    provider:req.body.provider,
+                    cost:req.body.cost,
+                    markdown:req.body.markdown,
+                    thumbnail:req.body.thumbnail,
+                    stock:req.body.stock
+                }),
+                    code: EError.INVALID_TYPES_ERROR
+            })
+            return
+        }
+        
         const codeValidation = await this.productService.getProductBy({code:req.body.code})
         console.log(codeValidation);
         if (codeValidation) {
-            console.log('Error');
-            return res.send({status:"Failed", payload: "El codigo corresponde a otro producto"})
+            CustomError.createError({
+                name: 'Codigo de Usuario existente',
+                cause: duplicatedProductCodeError(req.body.code),
+                code: EError.DUPLICATED_DATA_ERROR
+            })
+            return
+            /* console.log('Error');
+            return res.send({status:"Failed", payload: "El codigo corresponde a otro producto"}) */
           }
-        const {code,category,subCategory,title,description,brand,provider,cost,markdown,thumbnail,stock, status} = req.body
+        const {code,category,subCategory,title,description,brand,provider,cost,markdown,thumbnail,stock} = req.body
         const price = cost + ((cost * markdown) / 100)
         const newProduct = await this.productService.addProduct({
             code,
@@ -36,7 +77,7 @@ createProduct  = async (req,res)=>{
         const {io} = req
         io.emit('realTimeProducts', await this.productService.getProducts({},req.filter))
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 }
 

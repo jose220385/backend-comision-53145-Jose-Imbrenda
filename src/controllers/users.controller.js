@@ -1,4 +1,7 @@
-import { userService } from "../service.index.js";
+import { userService } from "../service/index.js";
+import { CustomError } from "../service/errors/CustomError.js";
+import { EError } from "../service/errors/enums.js";
+import { generateUserError } from "../service/errors/info.js";
 import { cartService } from "../service/index.js";
 
 class UsersController {
@@ -7,9 +10,21 @@ class UsersController {
         this.cartService = cartService
     }
 
-    createUser = async (req,res)=>{
+    createUser = async (req,res,next)=>{
         try {
-            if(!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password || !req.body.age){return res.status(404).send('Falta completar campos')}
+            if(!req.body.first_name || !req.body.last_name || !req.body.email || !req.body.password || !req.body.age){
+                //return res.status(404).send('Falta completar campos')
+                CustomError.createError({
+                    name: 'Error al crear un Usuario',
+                    cause: generateUserError({
+                        first_name : req.body.first_name, 
+                        last_name : req.body.last_name, 
+                        email: req.body.email, 
+                        password: req.body.password, 
+                        age:req.body.age }),
+                        code: EError.INVALID_TYPES_ERROR
+                })
+            }
             const{first_name, last_name, age, email, password} = req.body
             const userFound = await this.userService.getUserBy({email})
             
@@ -37,7 +52,7 @@ class UsersController {
             return res.send({status:'success', payload :result})
             
         } catch (error){
-            console.log(error);
+            next(error)
         }
     }
 

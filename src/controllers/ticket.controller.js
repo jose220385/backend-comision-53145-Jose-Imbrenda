@@ -1,3 +1,5 @@
+import { CustomError } from "../service/errors/CustomError.js";
+import { noTicketInSession } from "../service/errors/info.js";
 import { cartService, ticketService } from "../service/index.js"
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,10 +9,18 @@ class TicketController{
         this.cartService = cartService
     }
 
-    createTicket = async(req,res) =>{
+    createTicket = async(req,res,next) =>{
         try {
             if (!req.session.ticket) {
-                return res.status(400).send("No hay ticket en la sesión");
+                CustomError.createError({
+                    name: 'No hay ticket en la sesion',
+                    cause: noTicketInSession(),
+                    code: EError.NO_TICKET_IN_SESSION
+                })
+                return
+                //customizar error
+                
+                 //return res.status(400).send("No hay ticket en la sesión");
             }
             const{totalPurchase,productsWithoutStock, productsWithStock} = req.session?.ticket
             const{email, cart} = req.session.user
@@ -43,7 +53,8 @@ class TicketController{
 
             //return res.redirect('/products')
         } catch (error) {
-            console.log(error);
+            //console.log(error);
+            next(error)
         }
        
 

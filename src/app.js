@@ -14,6 +14,8 @@ import passport from 'passport'
 import { initPassport } from './config/passport.config.js'
 import { PRIVATE_KEY } from './utils/jsonwebtoken.js'
 import { objectConfig } from './dotenv.config.js'
+import { handleErrors } from './middlewares/errors/index.js'
+
 
 const app = express()
 
@@ -32,7 +34,7 @@ function productsSocket(io){
     })
 }
 
-
+app.use(handleErrors())
 
 app.use(productsSocket(io))
 

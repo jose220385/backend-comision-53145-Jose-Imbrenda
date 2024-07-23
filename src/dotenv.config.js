@@ -19,6 +19,6 @@ export const objectConfig = {
     persistence: process.env.PERSISTENCE
 }
 
-console.log(process.env.ADMIN_MAIL);
+//console.log(process.env.ADMIN_MAIL);
 
 //node src/dotenv.config.js
