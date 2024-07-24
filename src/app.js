@@ -16,6 +16,7 @@ import { PRIVATE_KEY } from './utils/jsonwebtoken.js'
 import { objectConfig } from './dotenv.config.js'
 import { handleErrors } from './middlewares/errors/index.js'
 import { addLogger } from './middlewares/addLogger.middleware.js'
+import logger from './utils/loggers.js'
 
 
 const app = express()
@@ -23,7 +24,7 @@ const app = express()
 const PORT = process.env.PORT || 8080
 const httpServer = app.listen(PORT, err =>{
     if(err) console.log(err)
-    console.log('Server escuchando en el puerto', PORT)
+    logger.info('Server escuchando en el puerto', PORT)
 })
 
 const io = new Server(httpServer)
@@ -73,7 +74,7 @@ app.set('view engine', 'handlebars')
 app.use(routerApp)
 
 io.on('connection', socket =>{
-    console.log('nuevo cliente conectado')
+    logger.info('nuevo cliente conectado')
     socket.on('message', async data => {
         await messageModel.create(data)
         socket.emit('messageLogs', await messageModel.find().lean())
