@@ -1,6 +1,7 @@
 import { objectConfig } from "../dotenv.config.js";
 import UsersCurrentDto from "../dtos/usersCurrent.dto.js";
 import { userService } from "../service/index.js";
+import logger from "../utils/loggers.js";
 
 class SessionsController{
     constructor(){
@@ -11,16 +12,16 @@ class SessionsController{
         try {
             return res.send({status:'succes', payload: 'usuario registrado con exito'})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)        
         }   
     }
 
     failRegister = async (req,res)=>{
         try {
-            console.log('fallo la estrategia de registro');
+            logger.error('Fallo en la estrategia de registo')
             return res.send({error:'failed'})
         } catch (error) {
-            console.log(error);
+            logger.error(error)        
         }   
     }
 
@@ -33,9 +34,10 @@ class SessionsController{
             role: req.user.email === objectConfig.adminMail? 'admin':'user',
             cart: req.user.cart
         }
+            logger.info('usuario logeado')
             return res.send({status:'succes', payload: req.session.user})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         }
 
     }
@@ -44,8 +46,8 @@ class SessionsController{
             console.log('fallo la estrategia de login');
             return res.send({error:'failed'})
         } catch (error) {
-            console.log(error)
-        }
+            logger.error(error.message)        
+        }   
     }
 
     githubLogin = async (req,res)=>{}
@@ -53,6 +55,7 @@ class SessionsController{
     githubCallback = (req,res)=>{
         console.log(req.user);
         req.session.user = req.user
+        logger.info('Sesion de usuario iniciada con Github')
         res.redirect('/products')
     }
 
@@ -61,6 +64,7 @@ class SessionsController{
             req.session.destroy(err =>{
                 if(err) return({status:'error', error:err})
             })
+            logger.info('Sesion de usuario terminada')
             return res.redirect('/login')
            /*  try{
                 res.clearCookie('papeleraCookieToken').status(204).send()
@@ -69,8 +73,8 @@ class SessionsController{
                 console.log(error);
             } */
         } catch (error) {
-            console.log(error);
-        }
+            logger.error(error.message)        
+        }   
         
     }
 
@@ -82,8 +86,8 @@ class SessionsController{
             //console.log(req.user);
             return res.send(userDTO)
         } catch (error) {
-            console.log(error);
-        }       
+            logger.error(error.message)        
+        }      
     }
 
     pruebas = (req,res) =>{
@@ -92,8 +96,8 @@ class SessionsController{
             console.log(objectConfig);
             return res.send('Response:' + adminMail)
         } catch (error) {
-            console.log(error);
-        }       
+            logger.error(error.message)        
+        }      
     }
 
     }

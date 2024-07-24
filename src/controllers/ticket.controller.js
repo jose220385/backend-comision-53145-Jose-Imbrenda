@@ -2,6 +2,7 @@ import { CustomError } from "../service/errors/CustomError.js";
 import { noTicketInSession } from "../service/errors/info.js";
 import { cartService, ticketService } from "../service/index.js"
 import { v4 as uuidv4 } from 'uuid';
+import logger from "../utils/loggers.js";
 
 class TicketController{
     constructor(){
@@ -54,6 +55,7 @@ class TicketController{
             //return res.redirect('/products')
         } catch (error) {
             //console.log(error);
+            logger.error(error.name)
             next(error)
         }
        

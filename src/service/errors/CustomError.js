@@ -5,7 +5,6 @@ export class CustomError{
         error.code = code
         error.cause = cause
         throw error
-
     }
     
 }

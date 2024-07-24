@@ -1,5 +1,6 @@
 import { categoryService } from "../service/index.js"
 import {v4 as uuidv4} from 'uuid'
+import logger from "../utils/loggers.js"
 
 class CategoriesController{
     constructor(){
@@ -9,10 +10,11 @@ class CategoriesController{
     createCategory = async (req,res)=>{
         try {
             const newCategory = await this.categoryService.addCategory(req.body)
+            logger.info('Categoria Creada')
             return res.send({status:'success', payload: newCategory})
         } catch (error) {
-            console.log(error);
-        }
+            logger.error(error.message)         
+        }   
         
     }
     
@@ -21,7 +23,7 @@ class CategoriesController{
             const categories = await this.categoryService.getCategories()
             return res.send({status:'success', payload: categories})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)  
         }
     }
 
@@ -32,9 +34,10 @@ class CategoriesController{
                 {categoryName:newSubCategory.categoryName},
                 { $addToSet: { subCategories: {_id:uuidv4(),subCategoryName: newSubCategory.subCategoryName} } }
             )
+            logger.info('Sub-Categoria Creada')
             return res.send({status:'success', payload: result})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
     }
     
@@ -45,7 +48,7 @@ class CategoriesController{
             const categoryFound = await this.categoryService.getSubCategories({categoryName:catId})
             return res.send({status:'success', payload: categoryFound.subCategories})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
     }
     

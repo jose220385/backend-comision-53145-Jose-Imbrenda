@@ -1,6 +1,7 @@
 import { CustomError } from "../service/errors/CustomError.js";
 import { emptyCartError } from "../service/errors/info.js";
 import { cartService, productService } from "../service/index.js";
+import logger from "../utils/loggers.js";
 
 
 class CartsController {
@@ -16,8 +17,8 @@ class CartsController {
             if(!ProductsByCartId){return res.status(404).send({status:'error', error: 'Carrito no encontrado'})}
             res.send({status: 'success', payload: ProductsByCartId})
         } catch (error) {
-            console.log(error);
-        }ß
+            logger.error(error.message) 
+        }
            
     }
 
@@ -26,7 +27,7 @@ class CartsController {
             const carts = await this.cartService.getCarts()
             res.send({status: 'success', payload: carts})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
         
     }
@@ -36,7 +37,7 @@ class CartsController {
             await this.cartService.addCart()
             res.send({status: 'success', payload: 'Carrito creado satisfactoriamente'})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
     }
        
@@ -69,7 +70,7 @@ class CartsController {
             
             
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
     }
 
@@ -82,7 +83,7 @@ class CartsController {
             const {io} = req
             io.emit('cartView-deleteProduct', await this.cartService.getProductsByCartId(cid))
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
     }
     
@@ -92,7 +93,7 @@ class CartsController {
             const cart = await this.cartService.deleteProducts(cid)
             return res.send({status:"success", payload: cart})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
     }  
 
@@ -110,7 +111,7 @@ class CartsController {
             /* const {io} = req
             io.emit('cartView-modifyQuantity', await this.cartService.getProductsByCartId(cid)) */
         } catch (error) {
-            console.log(error);
+            logger.error(error.message) 
         }
     }
     
@@ -172,6 +173,7 @@ class CartsController {
             //res.send({status:"success", payload: {totalPurchase, productsWithStock, productsWithoutStock}})
 
         } catch (error) {
+            logger.error(error.name)
             next(error)
         }
         

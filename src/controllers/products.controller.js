@@ -2,6 +2,7 @@
 import { CustomError } from '../service/errors/CustomError.js'
 import { generateProductError } from '../service/errors/info.js'
 import {productService} from '../service/index.js'
+import logger from '../utils/loggers.js'
 
 
 class ProductsController{
@@ -77,6 +78,7 @@ createProduct  = async (req,res,next)=>{
         const {io} = req
         io.emit('realTimeProducts', await this.productService.getProducts({},req.filter))
     } catch (error) {
+        logger.error(error.name)
         next(error)
     }
 }
@@ -103,7 +105,7 @@ getProducts    = async (req,res)=>{
 
         
     } catch (error) {
-        console.log(error);
+        logger.error(error.message)
     }   
 }
 
@@ -116,7 +118,7 @@ getProduct     = async (req,res)=>{
         }
     res.send({status: 'success', payload: productFound})
     } catch (error) {
-        console.log(error);
+        logger.error(error.message)    
     }
 }
 
@@ -146,7 +148,7 @@ updateProduct  = async (req,res)=>{
         const {io} = req
         io.emit('realTimeProducts-upload', await this.productService.getProducts({},req.filter))
     } catch (error) {
-        console.log(error);
+        logger.error(error.message)    
     }
 }
 
@@ -157,7 +159,7 @@ deleteProduct  = async(req,res)=>{
         const {io} = req
         io.emit('realTimeProducts-delete', await this.productService.getProducts({},req.filter))
     } catch (error) {
-        console.log(error);
+        logger.error(error.message)
     }   
 }
 
@@ -168,7 +170,7 @@ changePrice = async (req,res)=>{
         res.send(await this.productService.changePrice(filter))
         //Falta terminar la logica
     } catch (error) {
-        console.log(error);
+        logger.error(error)    
     }
     /* const {io} = req
     io.emit('realTimeProducts-upload', await productService.getProducts()) */
@@ -178,7 +180,7 @@ testProduct = async (req,res) =>{
     try {
         res.send(await this.productService.test())
     } catch (error) {
-        console.log(error);
+        logger.error(error.message)
     }
 }
 

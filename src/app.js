@@ -15,6 +15,7 @@ import { initPassport } from './config/passport.config.js'
 import { PRIVATE_KEY } from './utils/jsonwebtoken.js'
 import { objectConfig } from './dotenv.config.js'
 import { handleErrors } from './middlewares/errors/index.js'
+import { addLogger } from './middlewares/addLogger.middleware.js'
 
 
 const app = express()
@@ -22,7 +23,7 @@ const app = express()
 const PORT = process.env.PORT || 8080
 const httpServer = app.listen(PORT, err =>{
     if(err) console.log(err)
-    console.log('Server escuchando en el puerto 8080')
+    console.log('Server escuchando en el puerto', PORT)
 })
 
 const io = new Server(httpServer)
@@ -44,13 +45,9 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static(`${dirname(__dirname)}/public`))
 
 app.use(cookieParser(PRIVATE_KEY))
-/* app.use(session({
-    secret:"secretCoder",
-    resave: true,
-    saveUninitialized: true
-}))  */
 
-objectConfig.mongoURL
+app.use(addLogger)
+
 app.use(session({
     store: MongoStore.create({
         mongoUrl: objectConfig.mongoURL,
@@ -82,6 +79,8 @@ io.on('connection', socket =>{
         socket.emit('messageLogs', await messageModel.find().lean())
     })
 })
+
+
 
 
 

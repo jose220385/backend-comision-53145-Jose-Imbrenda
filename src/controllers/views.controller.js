@@ -1,5 +1,6 @@
 import { brandService, cartService, categoryService, messageService, productService } from "../service/index.js";
 import  {generateProducts}  from "../utils/generateProducts.js";
+import logger from "../utils/loggers.js";
 
 class ViewsController{
     constructor(){
@@ -15,7 +16,7 @@ class ViewsController{
             if(!req.user) return res.redirect('/login')
             return res.redirect('/products')
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         }
     }
 
@@ -60,7 +61,7 @@ class ViewsController{
                 status: filter.status
             })
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         }    
     }
 
@@ -85,7 +86,7 @@ class ViewsController{
             nextPage,
         })
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         }
     }
 
@@ -96,7 +97,7 @@ class ViewsController{
             const product = await this.productService.getProductById(pid)
             res.render('productView', {...product, cid, styles:"productStyles.css"})
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         } 
     }
 
@@ -110,7 +111,7 @@ class ViewsController{
             styles:"cartStyles.css"
         })
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         }    
     }
 
@@ -123,7 +124,7 @@ class ViewsController{
             styles: 'homeStyles.css'
         })
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         }
     }
 
@@ -134,7 +135,7 @@ class ViewsController{
                 styles: 'homeStyles.css'
             })
         } catch (error) {
-            
+            logger.error(error.message)
         }  
     }
 
@@ -145,7 +146,7 @@ class ViewsController{
                 styles: 'homeStyles.css'
             })
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
         }
     }
 
@@ -165,12 +166,13 @@ class ViewsController{
                 productsWithoutStockExist
             })
         } catch (error) {
-            console.log(error);
+            logger.error(error.message)
             }
     }
 
     productMockView = async(req,res) =>{
-        let products = []
+        try {
+            let products = []
         for (let index = 0; index < 100; index++) {
             const product = await generateProducts()
             products.push(product)
@@ -182,6 +184,26 @@ class ViewsController{
             styles:"homeStyles.css",
             products,
         })
+        } catch (error) {
+            logger.error(error.message)
+        }
+        
+    }
+
+    loggerTest = async(req,res) =>{
+        try {
+            logger.fatal("Error Fatal")
+            logger.error("Error")
+            logger.warning("Advertencia")
+            logger.info('Log de informacion')
+            logger.http('Log de http')
+            logger.debug('log de depuracion')
+            res.send("Test de loggers completado")
+        
+        } catch (error) {
+            logger.error(error.message)
+        }
+        
     }
 
 }

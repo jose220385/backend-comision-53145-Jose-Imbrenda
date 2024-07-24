@@ -18,7 +18,8 @@ const{
     loginView,
     registerView,
     ticketView,
-    productMockView
+    productMockView,
+    loggerTest
 }= new ViewsController()
 
 router.get('/', homeView) 
@@ -39,6 +40,8 @@ router.get('/login', loginView)
 router.get('/register', registerView)
 
 router.get('/ticket', authUser, ticketView)
+
+router.get('/loggerTest', loggerTest)
 
 router.get('/mockingproducts',compression(), productMockView)
 

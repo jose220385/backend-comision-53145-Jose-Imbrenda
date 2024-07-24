@@ -3,6 +3,7 @@ import { CustomError } from "../service/errors/CustomError.js";
 import { EError } from "../service/errors/enums.js";
 import { generateUserError } from "../service/errors/info.js";
 import { cartService } from "../service/index.js";
+import logger from "../utils/loggers.js";
 
 class UsersController {
     constructor(){
@@ -52,6 +53,7 @@ class UsersController {
             return res.send({status:'success', payload :result})
             
         } catch (error){
+            logger.error(error.name)
             next(error)
         }
     }
@@ -62,7 +64,7 @@ class UsersController {
             const user = this.userService.getUserBy(filter)
             return res.send({status:'success', payload :user})
         } catch (error){
-            console.log(error);
+            logger.error(error.message)
         }
     }
 }
