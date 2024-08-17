@@ -1,0 +1,96 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene los productos de un carrito determinado por su id
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Los productos fueron obtenidos correctamente de la base de datos
+          content:
+            application/json:
+              schema:
+                  $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por Mongo
+        code:
+          type: String
+          description: Codigo de Producto no se puede repetir
+        title: 
+          type: String
+          description: Titulo de Producto
+        description: 
+          type: String
+          description: Descripcion de Producto
+        cost:
+          type: Number
+          description: Costo de Producto
+        markdown: 
+          type: Number
+          description: Porcentaje de ganancia del Producto tiene que ser mayor a cero
+        price: 
+          type: Number
+          description: Precio del Producto. Surge del calculo entre el cost por el markdown dividido 100
+        thumbnail: 
+          type: String
+          description: Ruta de la foto del producto
+        stock: 
+          type: Number
+          description: Stock del producto
+        category: 
+          type: String
+          description: Categoria del producto
+        subCategory: 
+          type: String
+          description: SubCategoria del producto
+        brand: 
+          type: String
+          description: marca del producto
+        provider: 
+          type: String
+          description: proveedor
+        status: 
+          type: Boolean
+          description: estado del producto
+        owner:
+          type: String
+          description: Usuario que creo el producto
+      example:
+        _id: ObjectId('66bd75df61d7230745a84caa')
+        code: "222333"
+        title: "Objeto 222"
+        description: "lalala"
+        cost: 3000
+        markdown: 30
+        price: 3900
+        thumbnail: "./ruta nueva"
+        stock: 333
+        category: "Categoria 102"
+        subCategory: "Sub Categoria 6"
+        brand: "Marca 5"
+        provider: "otro"
+        status: true
+        owner: "jsimbrenda@gmail.com"
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por Mongo
+        products:
+          type: Array
+          description: Productos que contiene el carrito
+          items:
+            $ref: '#components/schemas/Product'
+      example:
+        _id: ObjectId('66bd75df61d7230745a84caa')
+        products: []

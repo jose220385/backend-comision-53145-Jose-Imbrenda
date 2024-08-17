@@ -58,7 +58,6 @@ createProduct  = async (req,res,next)=>{
             return res.send({status:"Failed", payload: "El codigo corresponde a otro producto"}) */
           }
         const {code,category,subCategory,title,description,brand,provider,cost,markdown,thumbnail,stock} = req.body
-        console.log(req.session.user.role);
         const owner = req.user?.role === 'premium'? req.session.user.email : 'admin'
         const price = cost + ((cost * markdown) / 100)
         const newProduct = await this.productService.addProduct({
