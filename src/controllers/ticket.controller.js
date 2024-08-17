@@ -49,7 +49,7 @@ class TicketController{
             }
 
             //delete req.session.ticket
-
+            logger.info('Ticket creado exitosamente')
            return res.send({status:"success", payload: {result, cartResult}})
 
             //return res.redirect('/products')

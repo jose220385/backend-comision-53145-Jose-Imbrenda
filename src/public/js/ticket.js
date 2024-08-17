@@ -17,7 +17,7 @@ buttonGoToPay.addEventListener('click', (e)=>{
   })
   .then(data => {
     console.log(data);
-    window.location.href = "http://localhost:8080/products/"
+    window.location.href = "http://localhost:3000/products/"
   })
   .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);

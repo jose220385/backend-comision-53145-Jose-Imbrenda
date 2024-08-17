@@ -25,7 +25,10 @@ export const objectConfig = {
     mongoPassword : process.env.MONGO_PASSWORD,
     adminMail: process.env.ADMIN_MAIL,
     mongoURL: process.env.MONGO_URL,
-    persistence: process.env.PERSISTENCE
+    persistence: process.env.PERSISTENCE,
+    nodemailerMail: process.env.NODEMAILER_MAIL,
+    nodemailerPassword: process.env.NODEMAILER_PASSWORD,
+    jwtSecret: process.env.JWT_SECRET
 }
 
 // Para produccion configurar la variable NODE_ENV=production para hacer mas performante el codigo

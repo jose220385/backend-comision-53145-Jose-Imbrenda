@@ -30,7 +30,7 @@ registerForm.addEventListener('submit', (e) =>{
     .then(data => {
         //sessionStorage.setItem('token', data.payload)
         console.log(data);
-        window.location.href = 'http://localhost:8080/login'
+        window.location.href = 'http://localhost:3000/login'
     })
     .catch(error => {
         console.error('Error en la consulta', error);

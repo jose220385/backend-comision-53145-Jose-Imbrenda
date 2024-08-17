@@ -1,88 +1,34 @@
-import express from 'express'
-import routerApp from './routes/index.js'
-import handlebars from 'express-handlebars'
-import { __dirname } from './utils/utils.js'
-import { Server } from 'socket.io'
-
-//import uploadRouter from './routes/upload.router.js'
-import {dirname} from "path"
-import { messageModel } from './dao/MONGO/models/message.model.js'
-import session from 'express-session'
-import cookieParser from 'cookie-parser'
-import MongoStore from 'connect-mongo'
-import passport from 'passport'
-import { initPassport } from './config/passport.config.js'
-import { PRIVATE_KEY } from './utils/jsonwebtoken.js'
-import { objectConfig } from './dotenv.config.js'
-import { handleErrors } from './middlewares/errors/index.js'
-import { addLogger } from './middlewares/addLogger.middleware.js'
+import cluster from 'node:cluster'
+import{cpus} from 'node:os'
 import logger from './utils/loggers.js'
+import { get } from 'node:http'
+import { getServer } from './server.js'
+//import { Server as ServerIO } from 'socket.io'
 
 
-const app = express()
-
+const numeroDeProcesadores = cpus().length
 const PORT = process.env.PORT || 8080
-const httpServer = app.listen(PORT, err =>{
-    if(err) console.log(err)
-    logger.info('Server escuchando en el puerto', PORT)
-})
 
-const io = new Server(httpServer)
+logger.info(`Numeros de hilos: ${numeroDeProcesadores}`)
+logger.info(`port:${PORT}`)
 
-function productsSocket(io){
-    return((req,res,next)=>{
-        req.io = io
-        next()
+if(cluster.isPrimary){
+    logger.info('Proceso primario generando un proceso hijo')
+    for (let i = 0; i < numeroDeProcesadores; i++) {
+        cluster.fork()
+    }
+    /* cluster.on('message', worker =>{
+        logger.info(`worker ${worker.process.pid} recibio un mensaje`)
+    }) */
+    cluster.on('exit', (worker, code, signal) => {
+        logger.warn(`Worker ${worker.process.pid} ha terminado con código ${code} y señal ${signal}`)
+        cluster.fork() // Reemplazar el worker terminado
     })
-}
-
-app.use(handleErrors())
-
-app.use(productsSocket(io))
-
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-
-app.use(express.static(`${dirname(__dirname)}/public`))
-
-app.use(cookieParser(PRIVATE_KEY))
-
-app.use(addLogger)
-
-app.use(session({
-    store: MongoStore.create({
-        mongoUrl: objectConfig.mongoURL,
-        mongoOptions:{
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        },
-        ttl:60*60*1000*24
-    }),
-    secret:"secretCoder",
-    resave: true,
-    saveUninitialized: true
     
-}))
-initPassport() // llamamos a los midddlewares creados
-app.use(passport.initialize()) // inicializa passport con los middlewares que creamos
-app.use(passport.session()) //entrelaza passport con session
-
-app.engine('handlebars', handlebars.engine())
-app.set('views', `${dirname(__dirname)}/views`)
-app.set('view engine', 'handlebars')
-
-app.use(routerApp)
-
-io.on('connection', socket =>{
-    logger.info('nuevo cliente conectado')
-    socket.on('message', async data => {
-        await messageModel.create(data)
-        socket.emit('messageLogs', await messageModel.find().lean())
-    })
-})
-
-
-
-
-
-
+} else{
+    logger.info('Al ser un proceso forkeado, no cuento como primario, por lo que isPrimary is false, soy un worker')
+    logger.info(`soy un proceso hijo con el id: ${process.pid}`)
+    getServer(PORT)
+ 
+    
+}

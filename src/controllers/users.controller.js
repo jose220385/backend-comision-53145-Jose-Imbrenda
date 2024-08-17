@@ -4,6 +4,9 @@ import { EError } from "../service/errors/enums.js";
 import { generateUserError } from "../service/errors/info.js";
 import { cartService } from "../service/index.js";
 import logger from "../utils/loggers.js";
+import { objectConfig } from "../dotenv.config.js";
+import  jwt  from "jsonwebtoken"
+import { createHash } from "../utils/bcrypt.js";
 
 class UsersController {
     constructor(){
@@ -58,7 +61,7 @@ class UsersController {
         }
     }
 
-    getUserBy = async (req,res)=>{
+    getUser = async (req,res)=>{
         try {
             const{filter} = req.params
             const user = this.userService.getUserBy(filter)
@@ -67,6 +70,44 @@ class UsersController {
             logger.error(error.message)
         }
     }
+
+    changePassword = async (req,res)=>{
+        try {
+            const { token } = req.params;
+            const { password } = req.body;
+            
+            const decoded = jwt.verify(token, objectConfig.jwtSecret);
+            const email = decoded.email;
+
+            const filter = {email}
+
+            const user = await this.userService.getUserBy(filter)
+
+            if(createHash(password) === user.password) return res.status(404).send('La contraseña debe ser diferente a la anterior')
+            
+            const result = await this.userService.updateUser({email},{$set:{password:createHash(password)}})
+
+            return res.send({status:'success', payload :result})
+        
+        } catch (error){
+            logger.error(error.message)
+        }
+    }
+
+    changeToUserPremium = async (req,res)=>{
+        try {
+            if(!req.user.email ){res.status(400).send({status:'error', payload:'No se registra usuario que haya hecho inicio de sesion'})}
+            const {email} = req.params
+            const result = await this.userService.updateUser({email},{$set:{role:'premium'}})
+            req.user.role = 'premium'
+            console.log(req.user);
+            return res.send({status:'success', payload :result})
+        } catch (error) {
+            logger.error(error.message)
+        }
+    }
+
+
 }
 
 export default UsersController

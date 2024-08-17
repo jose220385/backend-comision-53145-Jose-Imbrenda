@@ -27,7 +27,7 @@ loginForm.addEventListener('submit', (e) =>{
     .then(data => {
         //sessionStorage.setItem('token', data.payload)
         console.log(data);
-        window.location.href = 'http://localhost:8080/products'
+        window.location.href = 'http://localhost:3000/products'
     })
     .catch(error => {
         console.error('Error en la consulta', error);

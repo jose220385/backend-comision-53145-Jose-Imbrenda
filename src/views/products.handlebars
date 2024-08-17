@@ -7,6 +7,10 @@
     <a href="/api/sessions/logout" class="btn btn-outline-dark w-25 mt-3">Logout</a>
     {{/if}}
 
+    {{#if userName}}
+    <a href="/api/users/premium/{{email}}" class="btn btn-outline-dark w-25 mt-3">Cambiar a usuario Premium</a>
+    {{/if}}
+
     <h1>Bienvenido {{userName}}</h1>
     
     {{#if userName}}

@@ -8,6 +8,8 @@ const getTotal = () =>{
     })
     const total = productTotals.reduce((acumulador, valorActual) => acumulador + valorActual, 0);
 
+    if(quantities.length === 0) {total = 0}
+
     const nodeTotal = document.getElementById("total")
     nodeTotal.innerText =""
     nodeTotal.innerText= total

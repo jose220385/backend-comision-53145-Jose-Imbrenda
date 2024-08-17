@@ -1,6 +1,8 @@
 import { brandService, cartService, categoryService, messageService, productService } from "../service/index.js";
 import  {generateProducts}  from "../utils/generateProducts.js";
 import logger from "../utils/loggers.js";
+import { objectConfig } from "../dotenv.config.js"
+import  jwt  from "jsonwebtoken"
 
 class ViewsController{
     constructor(){
@@ -26,6 +28,7 @@ class ViewsController{
             console.log(req.session.ticket);
             const userName = req.user?.first_name
             const cid = req.user?.cart
+            const email = req.user?.email
             const {newPage, limit} = req.query
         
             const filter={}
@@ -43,6 +46,7 @@ class ViewsController{
             res.render('products', {
                 cid,
                 userName,
+                email,
                 userNotExist: userName? false:true,
                 title: 'Productos',
                 styles: 'homeStyles.css',
@@ -187,6 +191,42 @@ class ViewsController{
         } catch (error) {
             logger.error(error.message)
         }
+        
+    }
+
+    sendMailPasswordRecovery = async(req,res) =>{
+        try {
+            res.render('sendMailPasswordRecovery',{
+                title: 'SendRecoveryMail:',
+                styles: 'homeStyles.css'
+            })
+        } catch (error) {
+            logger.error(error.message)
+        }
+    }
+    
+    changePasswordView = async(req,res) =>{
+        try {
+            const { token } = req.params;
+            console.log(token);
+            console.log(objectConfig.jwtSecret);
+            const decoded = jwt.verify(token, objectConfig.jwtSecret);
+            console.log(decoded);
+            res.render('changePasswordView',{
+                title: 'ChangePassword:',
+                styles: 'homeStyles.css'
+            })
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                res.render('expiredToken',{
+                    title: 'expiredToken:',
+                    styles: 'homeStyles.css'
+                });
+              } else {
+                res.status(400).send('Token inválido.');
+              }
+        }
+        
         
     }
 

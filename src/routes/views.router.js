@@ -19,7 +19,9 @@ const{
     registerView,
     ticketView,
     productMockView,
-    loggerTest
+    loggerTest,
+    sendMailPasswordRecovery,
+    changePasswordView
 }= new ViewsController()
 
 router.get('/', homeView) 
@@ -41,9 +43,15 @@ router.get('/register', registerView)
 
 router.get('/ticket', authUser, ticketView)
 
+router.get('/passwordRecovery', sendMailPasswordRecovery )
+
+router.get('/reset-password/:token', changePasswordView)
+
 router.get('/loggerTest', loggerTest)
 
 router.get('/mockingproducts',compression(), productMockView)
+
+
 
 /* router.get('/logout', async (req,res)=>{
     res.render('login', {

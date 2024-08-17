@@ -58,6 +58,8 @@ createProduct  = async (req,res,next)=>{
             return res.send({status:"Failed", payload: "El codigo corresponde a otro producto"}) */
           }
         const {code,category,subCategory,title,description,brand,provider,cost,markdown,thumbnail,stock} = req.body
+        console.log(req.session.user.role);
+        const owner = req.user?.role === 'premium'? req.session.user.email : 'admin'
         const price = cost + ((cost * markdown) / 100)
         const newProduct = await this.productService.addProduct({
             code,
@@ -72,7 +74,8 @@ createProduct  = async (req,res,next)=>{
             price,
             thumbnail,
             stock: parseInt(stock),
-            status: true
+            status: true,
+            owner
           })
         res.send({status: "success", payload: newProduct})
         const {io} = req
@@ -101,7 +104,7 @@ getProducts    = async (req,res)=>{
 
         const products = await this.productService.getProducts({limit, newPage},filter)
     
-        res.send({status: 'success', payload: products})
+        return res.send({status: 'success', payload: products})
 
         
     } catch (error) {
@@ -126,6 +129,11 @@ updateProduct  = async (req,res)=>{
     try {
         const {pid} = req.params
         const productNotUpdated = await this.productService.getProductById(pid)
+        if(req.user?.role === 'premium'){
+            if(req.user?.email !== productNotUpdated.owner){
+                return res.status(400).send({error:'error', payload:'No posee permisos para modificar este producto'})
+            }
+        }
         const productToUpdate = req.body
         const cost = productToUpdate.cost === ""? productNotUpdated.cost : productToUpdate.cost
         const markdown= productToUpdate.markdown === ""? productNotUpdated.markdown : productToUpdate.markdown
@@ -155,6 +163,12 @@ updateProduct  = async (req,res)=>{
 deleteProduct  = async(req,res)=>{
     try {
         const {pid} = req.params
+        const productToDelete = await this.productService.getProductById(pid)
+        if(req.user?.role === 'premium'){
+            if(req.user?.email !== productToDelete.owner){
+                return res.status(400).send({error:'error', payload:'No posee permisos para modificar este producto'})
+            }
+        }
         res.send(await this.productService.deleteProductById(pid))
         const {io} = req
         io.emit('realTimeProducts-delete', await this.productService.getProducts({},req.filter))

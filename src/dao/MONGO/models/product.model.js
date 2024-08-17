@@ -44,6 +44,9 @@ markdown: {
   },
   provider: String,
   status: Boolean,
+  owner:{
+    type:String
+  }
 });
 
 schema.plugin(mongoosePaginate)

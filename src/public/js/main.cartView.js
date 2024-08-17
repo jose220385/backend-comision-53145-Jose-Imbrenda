@@ -44,7 +44,7 @@ purchaseButton.addEventListener('click', async (e)=>{
   })
   .then(data => {
     console.log(data);
-    window.location.href = 'http://localhost:8080/ticket'
+    window.location.href = 'http://localhost:3000/ticket'
   })
   .catch(error => {
     console.error('Error en la respuesta del servidor:', error);

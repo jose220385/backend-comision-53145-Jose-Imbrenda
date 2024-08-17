@@ -2,6 +2,7 @@ import { objectConfig } from "../dotenv.config.js";
 import UsersCurrentDto from "../dtos/usersCurrent.dto.js";
 import { userService } from "../service/index.js";
 import logger from "../utils/loggers.js";
+import { sendMail } from "../utils/sendMail.js";
 
 class SessionsController{
     constructor(){
@@ -92,9 +93,19 @@ class SessionsController{
 
     pruebas = (req,res) =>{
         try {
-            const {adminMail} = objectConfig
+            /* const {adminMail} = objectConfig
             console.log(objectConfig);
-            return res.send('Response:' + adminMail)
+            return res.send('Response:' + adminMail) */
+            sendMail({
+                usermail:'jsimbrenda@gmail.com',
+                subject:'Mail de puebas',
+                html:`
+                <div>
+                    <h1>Mail de pruebas</h1>
+                </div>
+                `
+            })
+            return res.send('Mail Enviado')
         } catch (error) {
             logger.error(error.message)        
         }      
