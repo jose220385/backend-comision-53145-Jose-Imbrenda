@@ -1,16 +1,159 @@
 paths:
+  /api/carts:
+    post:
+      summary: Crea un carrito en la BD
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/createCart'
+      responses:
+        "200":
+          description: Carrito creado exitosamente
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
+
   /api/carts/{cid}:
     get:
       summary: Obtiene los productos de un carrito determinado por su id
       tags:
         - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito donde se desea solicitar los productos
+          schema:
+            type: String
       responses:
         "200":
-          description: Los productos fueron obtenidos correctamente de la base de datos
+          description: Los productos fueron obtenidos correctamente del carrito seleccionado
           content:
             application/json:
               schema:
                   $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
+  
+  /api/carts/carts/all:
+    get:
+      summary: todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Los carritos fueron obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                  $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
+
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agrega un producto con una cantidad determinada a el carrito seleccionado. Si el producto se encuentra en el carrito suma su cantidad a ese.
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito donde se desea agregar el producto
+        schema:
+          type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del del producto que se desea agregar
+        schema:
+          type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/addProductToCart'
+      responses:
+        "200":
+          description: Producto agregado exitosamente
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
+    delete:
+      summary: Borra un producto determinado por su ID del carrito seleccionado por su ID
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito donde se desea agregar el producto
+        schema:
+          type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del del producto que se desea agregar
+        schema:
+          type: String
+      responses:
+        "200":
+          description: Producto borrado exitosamente
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
+          
+  /api/carts/{cid}/changeQ/{pid}:
+    put:
+      summary: Cambiar cantidad de un producto en un carrito determinado
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito donde se desea cambiar la cantidad de producto
+        schema:
+          type: String
+      - name: pid
+        in: path
+        required: true
+        description: id del del producto que se desea cambiar su cantidad
+        schema:
+          type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/changeProductQuantity'
+      responses:
+        "200":
+          description: Producto agregado exitosamente
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
+
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Obtiene los productos de un carrito y guarda los valores en la session.ticket para poder continuar a generar el ticket de compra. Descuenta stock en los productos seleccionados, checkea si cumplen con el stock sino los guarda en el carrito del cliente para una futura compra.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito donde se desea continuar la compra
+          schema:
+            type: String
+      responses:
+        "200":
+          description: Se ha constinuado a la operacion de generacion de ticket exitosamente
+          content:
+            application/json:
+              schema:
+                  $ref: '#components/schemas/TotalPurchase'
         "500":
           description: Error interno del servidor usualmente generado por una query defectuosa o un fallo en la base de datos
 
@@ -94,3 +237,51 @@ components:
       example:
         _id: ObjectId('66bd75df61d7230745a84caa')
         products: []
+    TotalPurchase:
+      type: object
+      properties:
+        status:
+          type: String
+          description: descripcion de la respuesta
+        payload:
+          type: object
+          properties:
+            totalPurchase:
+              type: Number
+              description: Monto total de la compra
+            productsWithStock:
+              type: Array
+              description: Productos que cuentan con stock para poder ser adquiridos
+            productsWithoutStock:
+              type: Array
+              description: Productos que no cuentan con stock para poder ser adquiridos. Se guardan en el carrito para una futura compra
+
+  requestBodies:
+    createCart:
+      type: object
+      properties:
+        products:
+          type: Array
+          description: Array de productos donde el usuario va a ir agregando
+      example:
+          products: []
+    addProductToCart:
+      type: object
+      properties:
+        product:
+          type: String
+          description: id del producto que se desea agregar
+        quantity:
+          type: Number
+          description: Cantidad de producto que se desea agregar
+      example:
+          product: '66bd7435f24d58f3ae504966'
+          quantity: 2
+    changeProductQuantity:
+      type: object
+      properties:
+        quantity:
+          type: Number
+          description: Cantidad de producto que se desea modificar
+      example:
+          quantity: 2

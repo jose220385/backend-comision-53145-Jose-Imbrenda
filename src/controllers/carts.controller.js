@@ -126,7 +126,7 @@ class CartsController {
                     cause: emptyCartError(),
                     code: EError.EMPTY_CART_ERROR
                 })
-                return
+                return res.status(400).send({error: error.name})
                 //return res.send("No hay productos en el carrito")
             }
 
