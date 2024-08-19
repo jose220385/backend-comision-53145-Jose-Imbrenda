@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha src/test/PRODUCTS/createProduct.supertest.js",
     "dev": "node --watch src/server.js --mode development",
     "start:dev": "nodemon src/server.js",
     "start": "node src/server.js --mode production"
@@ -43,5 +43,10 @@
     "uuid": "^9.0.1",
     "winston": "^3.13.1",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
   }
 }
